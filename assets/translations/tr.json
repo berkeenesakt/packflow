@@ -1,0 +1,12 @@
+{
+    "onboarding": {
+        "create_packing_lists": "Paketleme Listeleri Oluştur",
+        "never_forget_essential_items_with_smart_packing_lists": "Önemli eşyaları unutmayacaksınız",
+        "organize_by_categories": "Kategorilerine Göre Düzenle",
+        "keep_your_items_organized_in_custom_categories": "Özel kategorilerde sıralanacak",
+        "smart_reminders": "Akıllı Hatırlatıcılar",
+        "get_reminded_to_check_your_list_before_departure": "Kalkış öncesinde listeyi kontrol etmeyi unutmayacaksınız",
+        "login": "Giriş Yap",
+        "continue_without_login": "Giriş Yapmadan Devam Et"
+    }
+}

@@ -1,0 +1,73 @@
+2. Core Features Development
+
+A. User Onboarding
+
+✔ Create a splash screen with the app logo. @done(25-02-23 17:15)
+✔ Implement a simple onboarding flow to introduce app features. @done(25-02-23 17:15)
+☐ Develop a sign-up/login system (Optional: Use Firebase Authentication).
+
+B. Packing List Management
+
+☐ Design the UI for creating a new packing list.
+☐ Allow users to add custom items to the packing list.
+☐ Implement categories (e.g., Clothing, Electronics, Toiletries).
+☐ Add the ability to check off items when packing.
+☐ Implement drag-and-drop or reorder functionality for items.
+
+C. Packing Templates
+
+☐ Create a UI to save packing lists as templates.
+☐ Implement functionality to load a saved template into a new trip.
+☐ Provide some default templates (e.g., Beach Trip, Business Trip).
+
+D. Travel Mode & Alerts
+
+☐ Implement a travel mode that tracks when the user leaves a location.
+☐ Integrate location services to detect when the user is leaving.
+☐ Send notifications to remind users to check their packing list before leaving.
+☐ Highlight unchecked items in the alert.
+
+E. Item Management
+
+☐ Allow users to add, edit, and delete items in their inventory.
+☐ Enable users to assign items to different bags (e.g., Backpack, Suitcase).
+
+---
+
+3. Additional Features
+
+A. User Experience Improvements
+
+☐ Add animations and transitions for a smooth experience.
+☐ Implement search and filter functionality for items and templates.
+☐ Allow photo attachment to items (e.g., take a photo of the item).
+
+B. Backup & Sync
+
+☐ Integrate with cloud storage (e.g., Firebase, local storage) to back up data.
+☐ Enable multi-device sync (optional).
+
+---
+
+5. Testing & Debugging
+
+☐ Write unit tests for critical features.
+☐ Conduct end-to-end testing of the user flow.
+☐ Test on both Android and iOS devices/emulators.
+☐ Fix bugs and optimize performance.
+
+---
+
+6. Deployment & Release
+
+☐ Prepare app store assets (icons, screenshots, descriptions).
+☐ Publish on Google Play Store and Apple App Store.
+☐ Monitor app performance and gather user feedback.
+
+---
+
+7. Post-Launch
+
+☐ Implement analytics to track feature usage.
+☐ Gather user feedback and prioritize new features/updates.
+☐ Plan for regular updates and maintenance.

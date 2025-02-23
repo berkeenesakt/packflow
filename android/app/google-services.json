@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1030158446836",
+    "project_id": "packpal-1",
+    "storage_bucket": "packpal-1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030158446836:android:3b915fae47bfd6952c6ea1",
+        "android_client_info": {
+          "package_name": "com.aktumen.packpal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxwq51RjCD_-5TBtXwTn8DFd0yLVm1N2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
