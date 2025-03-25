@@ -81,6 +81,25 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [NavigationView]
+class NavigationRoute extends PageRouteInfo<void> {
+  const NavigationRoute({List<PageRouteInfo>? children})
+      : super(
+          NavigationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NavigationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NavigationView();
+    },
+  );
+}
+
+/// generated route for
 /// [OnboardingView]
 class OnboardingRoute extends PageRouteInfo<void> {
   const OnboardingRoute({List<PageRouteInfo>? children})
@@ -97,6 +116,56 @@ class OnboardingRoute extends PageRouteInfo<void> {
       return const OnboardingView();
     },
   );
+}
+
+/// generated route for
+/// [PackView]
+class PackRoute extends PageRouteInfo<PackRouteArgs> {
+  PackRoute({
+    Key? key,
+    required PackingList packingList,
+    required PackingListRepository repository,
+    List<PageRouteInfo>? children,
+  }) : super(
+          PackRoute.name,
+          args: PackRouteArgs(
+            key: key,
+            packingList: packingList,
+            repository: repository,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'PackRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PackRouteArgs>();
+      return PackView(
+        key: args.key,
+        packingList: args.packingList,
+        repository: args.repository,
+      );
+    },
+  );
+}
+
+class PackRouteArgs {
+  const PackRouteArgs({
+    this.key,
+    required this.packingList,
+    required this.repository,
+  });
+
+  final Key? key;
+  final PackingList packingList;
+  final PackingListRepository repository;
+
+  @override
+  String toString() {
+    return 'PackRouteArgs{key: $key, packingList: $packingList, repository: $repository}';
+  }
 }
 
 /// generated route for

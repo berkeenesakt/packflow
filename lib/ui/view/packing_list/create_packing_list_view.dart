@@ -1,8 +1,20 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:packpal/core/repositories/categories_repository.dart';
+import 'package:packpal/core/repositories/hive_categories_repository.dart';
+import 'package:packpal/core/repositories/hive_items_repository.dart';
+import 'package:packpal/core/repositories/items_repository.dart';
 import 'package:packpal/core/repositories/packing_list_repository.dart';
-import 'package:uuid/uuid.dart';
+import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packpal/ui/view/packing_list/create_packing_list_provider.dart';
+import 'package:packpal/ui/widgets/add_item.dart';
+import 'package:packpal/ui/widgets/app_filled_button.dart';
+import 'package:packpal/ui/widgets/app_text_form_field.dart';
+import 'package:packpal/ui/widgets/date_range_picker/date_range_picker.dart' as custom_picker;
+import 'package:provider/provider.dart';
 
 @RoutePage()
 class CreatePackingListView extends StatefulWidget {
@@ -21,155 +33,157 @@ class CreatePackingListView extends StatefulWidget {
 
 class _CreatePackingListViewState extends State<CreatePackingListView> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  DateTime? _departureDate;
-  bool _isLoading = false;
-
-  bool get _isEditing => widget.packingList != null;
+  late CreatePackingListProvider _provider;
+  final ItemsRepository _itemsRepository = HiveItemsRepository();
+  final CategoriesRepository _categoriesRepository = HiveCategoriesRepository();
 
   @override
   void initState() {
     super.initState();
-    if (_isEditing) {
-      _nameController.text = widget.packingList!.name;
-      _descriptionController.text = widget.packingList!.description ?? '';
-      _departureDate = widget.packingList!.departureDate;
-    }
+    _provider = CreatePackingListProvider(
+      repository: widget.repository,
+      itemsRepository: _itemsRepository,
+      categoriesRepository: _categoriesRepository,
+      packingList: widget.packingList,
+    );
+    Hive.box<PackingItem>('packing_items').listenable().addListener(() {
+      _provider.loadItems();
+    });
+    Hive.box<PackingCategory>('categories').listenable().addListener(() {
+      _provider.loadCategories();
+    });
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _descriptionController.dispose();
+    _provider.dispose();
     super.dispose();
   }
 
-  Future<void> _selectDate() async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: _departureDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
+  Future<void> _selectDateRange() async {
+    final dateRange = await custom_picker.DateRangePickerDialog.show(
+      context,
+      initialStartDate: _provider.startDate,
+      initialEndDate: _provider.endDate,
     );
-
-    if (date != null) {
-      setState(() => _departureDate = date);
+    if (dateRange != null && mounted) {
+      _provider.setDateRange(dateRange.start, dateRange.end);
     }
   }
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
+    final success = await _provider.save();
 
-    try {
-      final packingList = PackingList(
-        id: _isEditing ? widget.packingList!.id : const Uuid().v4(),
-        name: _nameController.text,
-        description: _descriptionController.text.isEmpty ? null : _descriptionController.text,
-        createdAt: _isEditing ? widget.packingList!.createdAt : DateTime.now(),
-        departureDate: _departureDate,
-        categories: _isEditing ? widget.packingList!.categories : [],
-      );
-
-      if (_isEditing) {
-        await widget.repository.updatePackingList(packingList);
-      } else {
-        await widget.repository.createPackingList(packingList);
-      }
-
-      if (mounted) {
-        context.back();
-      }
-    } on Exception {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error ${_isEditing ? 'updating' : 'creating'} packing list'),
-            backgroundColor: Theme.of(context).colorScheme.error,
+    if (success && mounted) {
+      context.back();
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            LocaleKeys.packing_list_error_saving.tr(
+              namedArgs: {
+                'action': _provider.isEditing ? LocaleKeys.common_updating.tr() : LocaleKeys.common_creating.tr(),
+              },
+            ),
           ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_isEditing ? 'Edit Packing List' : 'Create Packing List'),
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                hintText: 'Enter a name for your packing list',
+    return ChangeNotifierProvider<CreatePackingListProvider>.value(
+      value: _provider,
+      child: Builder(
+        builder: (context) {
+          final provider = Provider.of<CreatePackingListProvider>(context);
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                provider.isEditing
+                    ? LocaleKeys.packing_list_edit_title.tr()
+                    : LocaleKeys.packing_list_create_title.tr(),
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a name';
-                }
-                return null;
-              },
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description (optional)',
-                hintText: 'Add a description for your packing list',
-              ),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 16),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Departure Date (optional)'),
-              subtitle: Text(
-                _departureDate != null
-                    ? '${_departureDate!.day}/${_departureDate!.month}/${_departureDate!.year}'
-                    : 'Not set',
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
+            body: Form(
+              key: _formKey,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
                 children: [
-                  if (_departureDate != null)
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () => setState(() => _departureDate = null),
+                  AppTextFormField(
+                    controller: provider.nameController,
+                    labelText: LocaleKeys.packing_list_name_label.tr(),
+                    hintText: LocaleKeys.packing_list_name_hint.tr(),
+                    validator: (value) {
+                      final val = value?.trim();
+                      if (val == null || val.isEmpty || val.length < 3) {
+                        return LocaleKeys.packing_list_name_validation.tr();
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  AppTextFormField(
+                    controller: provider.descriptionController,
+                    labelText: LocaleKeys.packing_list_description_label.tr(),
+                    hintText: LocaleKeys.packing_list_description_hint.tr(),
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(LocaleKeys.packing_list_travel_dates.tr()),
+                    subtitle: Text(
+                      provider.startDate != null && provider.endDate != null
+                          ? '${DateFormat('dd/MM/yyyy').format(provider.startDate!)} - ${DateFormat('dd/MM/yyyy').format(provider.endDate!)}'
+                          : LocaleKeys.packing_list_dates_not_set.tr(),
                     ),
-                  IconButton(
-                    icon: const Icon(Icons.calendar_today),
-                    onPressed: _selectDate,
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (provider.startDate != null)
+                          IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: provider.clearDateRange,
+                          ),
+                        IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: _selectDateRange,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Items Section
+                  AddItem(
+                    categories: provider.categories,
+                    items: provider.items,
+                    onAddItem: provider.addItem,
+                    onSelectCategory: provider.setSelectedCategory,
+                    onToggleItem: provider.toggleItem,
+                    onDeleteItem: provider.deleteItem,
+                    selectedItems: provider.selectedItems,
+                  ),
+                  const SizedBox(height: 24),
+                  AppFilledButton(
+                    onPressed: _save,
+                    text: provider.isEditing
+                        ? LocaleKeys.packing_list_save_changes.tr()
+                        : LocaleKeys.packing_list_create_button.tr(),
+                    isLoading: provider.isLoading,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 32),
-            FilledButton(
-              onPressed: _isLoading ? null : _save,
-              child: _isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                      ),
-                    )
-                  : Text(_isEditing ? 'Save Changes' : 'Create List'),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

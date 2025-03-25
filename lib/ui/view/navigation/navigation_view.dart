@@ -1,0 +1,116 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:packpal/core/repositories/hive_packing_list_repository.dart';
+import 'package:packpal/core/router/app_router.dart';
+import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packpal/ui/view/home_view.dart';
+import 'package:packpal/ui/view/packing_list/packing_lists_view.dart';
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
+
+@RoutePage()
+class NavigationView extends StatefulWidget {
+  const NavigationView({super.key});
+
+  @override
+  State<NavigationView> createState() => _NavigationViewState();
+}
+
+class _NavigationViewState extends State<NavigationView> {
+  int currentPage = 0;
+
+  final List<Widget> pagesList = [
+    const HomeView(),
+    PackingListsView(repository: HivePackingListRepository()),
+  ];
+
+  final TextStyle labelStyle = const TextStyle(fontSize: 11);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: pagesList[currentPage],
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            colors: [
+              Colors.blue,
+              Colors.blueAccent,
+            ],
+          ),
+        ),
+        child: FloatingActionButton(
+          elevation: 0,
+          highlightElevation: 0,
+          splashColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
+          shape: const CircleBorder(),
+          onPressed: () {
+            context.router.push(CreatePackingListRoute(repository: HivePackingListRepository()));
+          },
+          child: const Icon(
+            color: Colors.white,
+            Icons.add,
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 90,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 3,
+              blurRadius: 10,
+              offset: const Offset(0, -1),
+            ),
+          ],
+        ),
+        child: StylishBottomBar(
+          elevation: 10,
+          fabLocation: StylishBarFabLocation.center,
+          notchStyle: NotchStyle.circle,
+          hasNotch: true,
+          backgroundColor: const Color.fromARGB(255, 247, 247, 247),
+          items: [
+            BottomBarItem(
+              selectedColor: Colors.blue,
+              icon: const Icon(Icons.dashboard),
+              title: Text(
+                style: labelStyle,
+                LocaleKeys.navigation_titles_home.tr(),
+              ),
+            ),
+            BottomBarItem(
+              selectedColor: Colors.blue,
+              icon: const Icon(Icons.backpack),
+              title: Text(
+                style: labelStyle,
+                LocaleKeys.navigation_titles_packs.tr(),
+              ),
+            ),
+            BottomBarItem(
+              selectedColor: Colors.blue,
+              icon: const Icon(Icons.settings),
+              title: Text(
+                style: labelStyle,
+                LocaleKeys.navigation_titles_settings.tr(),
+              ),
+            ),
+          ],
+          option: AnimatedBarOptions(
+            barAnimation: BarAnimation.blink,
+          ),
+          currentIndex: currentPage,
+          onTap: (value) {
+            setState(() {
+              currentPage = value;
+            });
+          },
+        ),
+      ),
+    );
+  }
+}

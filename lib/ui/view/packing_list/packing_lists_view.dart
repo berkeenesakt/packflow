@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:packpal/core/repositories/packing_list_repository.dart';
+import 'package:packpal/core/router/app_router.dart';
 
 @RoutePage()
 class PackingListsView extends StatefulWidget {
@@ -85,16 +86,10 @@ class _PackingListsViewState extends State<PackingListsView> {
             itemCount: packingLists.length,
             itemBuilder: (context, index) {
               final packingList = packingLists[index];
-              return _PackingListCard(packingList: packingList);
+              return _PackingListCard(packingList: packingList, repository: widget.repository);
             },
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO(berke): implement navigation to create packing list screen.
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }
@@ -103,9 +98,11 @@ class _PackingListsViewState extends State<PackingListsView> {
 class _PackingListCard extends StatelessWidget {
   const _PackingListCard({
     required this.packingList,
+    required this.repository,
   });
 
   final PackingList packingList;
+  final PackingListRepository repository;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +110,12 @@ class _PackingListCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       child: InkWell(
         onTap: () {
-          // TODO(berke): implement navigation to packing list details.
+          context.router.push(
+            PackRoute(
+              packingList: packingList,
+              repository: repository,
+            ),
+          );
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -178,7 +180,7 @@ class _PackingListCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '${packingList.checkedItems}/${packingList.totalItems} items packed',
+                '${packingList.checkedItems.length}/${packingList.totalItems} items packed',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],

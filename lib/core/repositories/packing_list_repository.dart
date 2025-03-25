@@ -7,12 +7,7 @@ abstract class PackingListRepository {
   Future<void> updatePackingList(PackingList packingList);
   Future<void> deletePackingList(String id);
 
-  Future<void> addCategory(String packingListId, PackingCategory category);
-  Future<void> updateCategory(String packingListId, PackingCategory category);
-  Future<void> deleteCategory(String packingListId, String categoryId);
-
-  Future<void> addItem(String packingListId, String categoryId, PackingItem item);
-  Future<void> updateItem(String packingListId, String categoryId, PackingItem item);
-  Future<void> deleteItem(String packingListId, String categoryId, String itemId);
-  Future<void> toggleItem(String packingListId, String categoryId, String itemId);
+  Future<void> addItem(String packingListId, PackingItem item);
+  Future<void> deleteItem(String packingListId, String itemId);
+  Future<void> toggleItem(String packingListId, String itemId);
 }

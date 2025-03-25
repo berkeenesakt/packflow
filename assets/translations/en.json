@@ -8,6 +8,55 @@
         "get_reminded_to_check_your_list_before_departure": "Get reminded to check your list before departure",
         "login": "Login",
         "continue_without_login": "Continue without login"
+    },
+    "navigation_titles": {
+        "home": "Home",
+        "packs": "Packs",
+        "settings": "Settings"
+    },
+    "add_sheet": {
+        "choose_an_option": "Choose an option",
+        "create_packing_list": "Create Packing List",
+        "add_item": "Add Item",
+        "add_category": "Add Category"
+    },
+    "packing_list": {
+        "create_title": "Create Packing List",
+        "edit_title": "Edit Packing List",
+        "name_label": "Name",
+        "name_hint": "Enter a name for your packing list",
+        "name_validation": "Please enter a name",
+        "description_label": "Description (optional)",
+        "description_hint": "Add a description for your packing list",
+        "travel_dates": "Travel Dates (optional)",
+        "dates_not_set": "Not set",
+        "create_button": "Create List",
+        "save_changes": "Save Changes",
+        "error_saving": "Error {{action}} packing list",
+        "items": "Items",
+        "delete_item_title": "Delete Item",
+        "delete_item_confirmation": "Are you sure you want to delete this item?",
+        "cancel": "Cancel",
+        "delete": "Delete"
+    },
+    "common": {
+        "updating": "updating",
+        "creating": "creating"
+    },
+    "date_picker": {
+        "cancel": "Cancel",     
+        "confirm": "Confirm",
+        "travel_date_past_error": "Travel date cannot be in the past",
+        "end_date_past_error": "End date cannot be in the past",
+        "unavailable_checkout_error": "This date is only available for checkout"
+    },
+    "categories": {
+        "electronics": "Electronics",
+        "clothes": "Clothes",
+        "toiletries": "Toiletries",
+        "essentials": "Essentials",
+        "documents": "Documents",
+        "add_new": "Add New Category"
     }
 }
     

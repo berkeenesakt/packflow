@@ -1,12 +1,61 @@
 {
     "onboarding": {
         "create_packing_lists": "Paketleme Listeleri Oluştur",
-        "never_forget_essential_items_with_smart_packing_lists": "Önemli eşyaları unutmayacaksınız",
-        "organize_by_categories": "Kategorilerine Göre Düzenle",
-        "keep_your_items_organized_in_custom_categories": "Özel kategorilerde sıralanacak",
+        "never_forget_essential_items_with_smart_packing_lists": "Akıllı paketleme listeleri ile gerekli eşyaları asla unutmayın",
+        "organize_by_categories": "Kategorilere Göre Düzenle",
+        "keep_your_items_organized_in_custom_categories": "Öğelerinizi özel kategorilerde düzenli tutun",
         "smart_reminders": "Akıllı Hatırlatıcılar",
-        "get_reminded_to_check_your_list_before_departure": "Kalkış öncesinde listeyi kontrol etmeyi unutmayacaksınız",
+        "get_reminded_to_check_your_list_before_departure": "Kalkıştan önce listenizi kontrol etmeniz için hatırlatılın",
         "login": "Giriş Yap",
-        "continue_without_login": "Giriş Yapmadan Devam Et"
+        "continue_without_login": "Giriş yapmadan devam et"
+    },
+    "navigation_titles": {
+        "home": "Ana Sayfa",
+        "packs": "Paketler",
+        "settings": "Ayarlar"
+    },
+    "add_sheet": {
+        "choose_an_option": "Bir seçenek seçin",
+        "create_packing_list": "Paketleme Listesi Oluştur",
+        "add_item": "Öğe Ekle",
+        "add_category": "Kategori Ekle"
+    },
+    "packing_list": {
+        "create_title": "Paketleme Listesi Oluştur",
+        "edit_title": "Paketleme Listesini Düzenle",
+        "name_label": "İsim",
+        "name_hint": "Paketleme listeniz için bir isim girin",
+        "name_validation": "Lütfen bir isim girin",
+        "description_label": "Açıklama (isteğe bağlı)",
+        "description_hint": "Paketleme listenize bir açıklama ekleyin",
+        "travel_dates": "Seyahat Tarihleri (isteğe bağlı)",
+        "dates_not_set": "Ayarlanmadı",
+        "create_button": "Liste Oluştur",
+        "save_changes": "Değişiklikleri Kaydet",
+        "error_saving": "Paketleme listesi {{action}} hatası",
+        "items": "Ögeler",
+        "delete_item_title": "Öğeyi Sil",
+        "delete_item_confirmation": "Bu öğeyi silmek istediğinizden emin misiniz?",
+        "cancel": "İptal",
+        "delete": "Sil"
+    },
+    "common": {
+        "updating": "güncelleme",
+        "creating": "oluşturma"
+    },
+    "date_picker": {
+        "cancel": "İptal",
+        "confirm": "Onayla",
+        "travel_date_past_error": "Seyahat tarihi geçmişte olamaz",
+        "end_date_past_error": "Bitiş tarihi geçmişte olamaz",
+        "unavailable_checkout_error": "Bu tarih yalnızca çıkış için kullanılabilir"
+    },
+    "categories": {
+        "electronics": "Elektronik",
+        "clothes": "Kıyafetler",
+        "toiletries": "Banyo Malzemeleri",
+        "essentials": "Temel Malzemeler",
+        "documents": "Belgeler",
+        "add_new": "Yeni Kategori Ekle"
     }
 }

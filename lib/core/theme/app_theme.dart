@@ -27,7 +27,6 @@ class AppTheme {
     primaryContainer: Color(0xFF1976D2),
     onPrimaryContainer: Color(0xFFE3F2FD),
     secondary: Color(0xFFCE93D8), // Light purple for dark theme
-    onSecondary: Color(0xFF4A148C),
     secondaryContainer: Color(0xFF7B1FA2),
     onSecondaryContainer: Color(0xFFF3E5F5),
     tertiary: Color(0xFF80DEEA), // Light cyan for dark theme
@@ -49,8 +48,9 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surfaceContainerHighest,
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: colorScheme.surfaceContainerHighest,
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
       ),

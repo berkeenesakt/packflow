@@ -34,7 +34,7 @@ class _SplashViewState extends State<SplashView> {
     await Future<void>.delayed(const Duration(seconds: 2));
     if (!mounted) return;
 
-    await context.router.replace(const HomeRoute());
+    await context.router.replace(const NavigationRoute());
   }
 
   @override
