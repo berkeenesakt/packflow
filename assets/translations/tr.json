@@ -37,7 +37,16 @@
         "delete_item_title": "Öğeyi Sil",
         "delete_item_confirmation": "Bu öğeyi silmek istediğinizden emin misiniz?",
         "cancel": "İptal",
-        "delete": "Sil"
+        "delete": "Sil",
+        "item_name": "Öğe Adı",
+        "item_name_required": "Öğe Adı gereklidir",
+        "no_items": "Henüz öğe eklenmedi. Aşağıdan yeni bir öğe oluşturun.",
+        "my_packing_lists": "Paketleme Listelerim",
+        "error_loading": "Paketleme listeleri yüklenirken hata oluştu",
+        "no_lists_yet": "Henüz paketleme listesi yok",
+        "create_first_list": "İlk paketleme listenizi oluşturun",
+        "items_packed": "öğe paketlendi",
+        "created_on": "Oluşturulma tarihi"
     },
     "common": {
         "updating": "güncelleme",
@@ -51,6 +60,7 @@
         "unavailable_checkout_error": "Bu tarih yalnızca çıkış için kullanılabilir"
     },
     "categories": {
+        "all": "Tümü",
         "electronics": "Elektronik",
         "clothes": "Kıyafetler",
         "toiletries": "Banyo Malzemeleri",

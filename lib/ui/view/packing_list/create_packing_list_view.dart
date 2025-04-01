@@ -115,52 +115,59 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
             body: Form(
               key: _formKey,
               child: ListView(
-                padding: const EdgeInsets.all(16),
                 children: [
-                  AppTextFormField(
-                    controller: provider.nameController,
-                    labelText: LocaleKeys.packing_list_name_label.tr(),
-                    hintText: LocaleKeys.packing_list_name_hint.tr(),
-                    validator: (value) {
-                      final val = value?.trim();
-                      if (val == null || val.isEmpty || val.length < 3) {
-                        return LocaleKeys.packing_list_name_validation.tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  AppTextFormField(
-                    controller: provider.descriptionController,
-                    labelText: LocaleKeys.packing_list_description_label.tr(),
-                    hintText: LocaleKeys.packing_list_description_hint.tr(),
-                    maxLines: 3,
-                  ),
-                  const SizedBox(height: 16),
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(LocaleKeys.packing_list_travel_dates.tr()),
-                    subtitle: Text(
-                      provider.startDate != null && provider.endDate != null
-                          ? '${DateFormat('dd/MM/yyyy').format(provider.startDate!)} - ${DateFormat('dd/MM/yyyy').format(provider.endDate!)}'
-                          : LocaleKeys.packing_list_dates_not_set.tr(),
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
                       children: [
-                        if (provider.startDate != null)
-                          IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: provider.clearDateRange,
-                          ),
-                        IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: _selectDateRange,
+                        AppTextFormField(
+                          controller: provider.nameController,
+                          labelText: LocaleKeys.packing_list_name_label.tr(),
+                          hintText: LocaleKeys.packing_list_name_hint.tr(),
+                          validator: (value) {
+                            final val = value?.trim();
+                            if (val == null || val.isEmpty || val.length < 3) {
+                              return LocaleKeys.packing_list_name_validation.tr();
+                            }
+                            return null;
+                          },
                         ),
+                        const SizedBox(height: 16),
+                        AppTextFormField(
+                          controller: provider.descriptionController,
+                          labelText: LocaleKeys.packing_list_description_label.tr(),
+                          hintText: LocaleKeys.packing_list_description_hint.tr(),
+                          maxLines: 3,
+                        ),
+                        const SizedBox(height: 16),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(LocaleKeys.packing_list_travel_dates.tr()),
+                          subtitle: Text(
+                            provider.startDate != null && provider.endDate != null
+                                ? '${DateFormat('dd/MM/yyyy').format(provider.startDate!)} - ${DateFormat('dd/MM/yyyy').format(provider.endDate!)}'
+                                : LocaleKeys.packing_list_dates_not_set.tr(),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (provider.startDate != null)
+                                IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: provider.clearDateRange,
+                                ),
+                              IconButton(
+                                icon: const Icon(Icons.calendar_today),
+                                onPressed: _selectDateRange,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
+
                   // Items Section
                   AddItem(
                     categories: provider.categories,
@@ -172,12 +179,15 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
                     selectedItems: provider.selectedItems,
                   ),
                   const SizedBox(height: 24),
-                  AppFilledButton(
-                    onPressed: _save,
-                    text: provider.isEditing
-                        ? LocaleKeys.packing_list_save_changes.tr()
-                        : LocaleKeys.packing_list_create_button.tr(),
-                    isLoading: provider.isLoading,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: AppFilledButton(
+                      onPressed: _save,
+                      text: provider.isEditing
+                          ? LocaleKeys.packing_list_save_changes.tr()
+                          : LocaleKeys.packing_list_create_button.tr(),
+                      isLoading: provider.isLoading,
+                    ),
                   ),
                 ],
               ),

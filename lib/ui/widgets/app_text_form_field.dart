@@ -5,6 +5,7 @@ class AppTextFormField extends StatelessWidget {
     required this.labelText,
     required this.hintText,
     this.controller,
+    this.focusNode,
     this.onSubmit,
     this.validator,
     this.maxLines = 1,
@@ -12,6 +13,7 @@ class AppTextFormField extends StatelessWidget {
   });
 
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final void Function(String)? onSubmit;
   final String labelText;
   final String hintText;
@@ -31,6 +33,7 @@ class AppTextFormField extends StatelessWidget {
         const SizedBox(height: 8),
         TextFormField(
           controller: localController,
+          focusNode: focusNode,
           onFieldSubmitted: onSubmit,
           decoration: InputDecoration(
             fillColor: Theme.of(context).colorScheme.onSecondary,

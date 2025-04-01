@@ -51,7 +51,10 @@ class HivePackingListRepository implements PackingListRepository {
   Future<void> deleteItem(String packingListId, String itemId) async {
     final packingList = await getPackingList(packingListId);
     if (packingList == null) return;
-    final updatedList = packingList.copyWith(items: packingList.items.where((item) => item.id != itemId).toList());
+    final updatedList = packingList.copyWith(
+      items: packingList.items.where((item) => item.id != itemId).toList(),
+      checkedItems: packingList.checkedItems.where((item) => item.id != itemId).toList(),
+    );
     await updatePackingList(updatedList);
   }
 
@@ -60,12 +63,15 @@ class HivePackingListRepository implements PackingListRepository {
     final packingList = await getPackingList(packingListId);
     final item = packingList?.items.firstWhere((item) => item.id == itemId);
     if (packingList == null || item == null) return;
-    if (packingList.checkedItems.contains(item)) {
-      packingList.checkedItems.remove(item);
+
+    var updatedCheckedItems = <PackingItem>[...packingList.checkedItems];
+    if (updatedCheckedItems.any((i) => i.id == item.id)) {
+      updatedCheckedItems = updatedCheckedItems.where((i) => i.id != item.id).toList();
     } else {
-      packingList.checkedItems.add(item);
+      updatedCheckedItems.add(item);
     }
-    final updatedList = packingList.copyWith(checkedItems: packingList.checkedItems);
+
+    final updatedList = packingList.copyWith(checkedItems: updatedCheckedItems);
     await updatePackingList(updatedList);
   }
 }

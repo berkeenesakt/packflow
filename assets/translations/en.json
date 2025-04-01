@@ -37,7 +37,16 @@
         "delete_item_title": "Delete Item",
         "delete_item_confirmation": "Are you sure you want to delete this item?",
         "cancel": "Cancel",
-        "delete": "Delete"
+        "delete": "Delete",
+        "item_name": "Item Name",
+        "item_name_required": "Item Name is required",
+        "no_items": "No items added yet. Create a new item below.",
+        "my_packing_lists": "My Packing Lists",
+        "error_loading": "Error loading packing lists",
+        "no_lists_yet": "No packing lists yet",
+        "create_first_list": "Create your first packing list",
+        "items_packed": "items packed",
+        "created_on": "Created on"
     },
     "common": {
         "updating": "updating",
@@ -51,6 +60,7 @@
         "unavailable_checkout_error": "This date is only available for checkout"
     },
     "categories": {
+        "all": "All",
         "electronics": "Electronics",
         "clothes": "Clothes",
         "toiletries": "Toiletries",

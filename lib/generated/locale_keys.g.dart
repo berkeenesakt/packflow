@@ -38,6 +38,15 @@ abstract class  LocaleKeys {
   static const packing_list_delete_item_confirmation = 'packing_list.delete_item_confirmation';
   static const packing_list_cancel = 'packing_list.cancel';
   static const packing_list_delete = 'packing_list.delete';
+  static const packing_list_item_name = 'packing_list.item_name';
+  static const packing_list_item_name_required = 'packing_list.item_name_required';
+  static const packing_list_no_items = 'packing_list.no_items';
+  static const packing_list_my_packing_lists = 'packing_list.my_packing_lists';
+  static const packing_list_error_loading = 'packing_list.error_loading';
+  static const packing_list_no_lists_yet = 'packing_list.no_lists_yet';
+  static const packing_list_create_first_list = 'packing_list.create_first_list';
+  static const packing_list_items_packed = 'packing_list.items_packed';
+  static const packing_list_created_on = 'packing_list.created_on';
   static const packing_list = 'packing_list';
   static const common_updating = 'common.updating';
   static const common_creating = 'common.creating';
@@ -48,6 +57,7 @@ abstract class  LocaleKeys {
   static const date_picker_end_date_past_error = 'date_picker.end_date_past_error';
   static const date_picker_unavailable_checkout_error = 'date_picker.unavailable_checkout_error';
   static const date_picker = 'date_picker';
+  static const categories_all = 'categories.all';
   static const categories_electronics = 'categories.electronics';
   static const categories_clothes = 'categories.clothes';
   static const categories_toiletries = 'categories.toiletries';

@@ -1,265 +1,467 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
-import 'package:packpal/core/repositories/packing_list_repository.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:packpal/core/repositories/hive_categories_repository.dart';
+import 'package:packpal/core/repositories/hive_items_repository.dart';
+import 'package:packpal/core/repositories/hive_packing_list_repository.dart';
+import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packpal/ui/widgets/add_item.dart';
 import 'package:packpal/ui/widgets/items/item_card.dart';
 
 @RoutePage()
 class PackView extends StatefulWidget {
   const PackView({
     required this.packingList,
-    required this.repository,
     super.key,
   });
 
   final PackingList packingList;
-  final PackingListRepository repository;
 
   @override
   State<PackView> createState() => _PackViewState();
 }
 
-class _PackViewState extends State<PackView> {
-  late PackingList _packingList;
+class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin {
+  final packRepository = HivePackingListRepository();
+  final itemsRepository = HiveItemsRepository();
+  final categoriesRepository = HiveCategoriesRepository();
+
+  List<PackingItem> items = [];
+  List<PackingCategory> categories = [];
+  List<PackingCategory> dialogCategories = [];
+  List<PackingItem> checkedItems = [];
+  PackingCategory? selectedDialogCategory;
+  PackingCategory? selectedCategory;
+  List<PackingItem> itemsOnCategory = [];
+  late AnimationController _progressAnimationController;
+  late Animation<double> _progressAnimation;
 
   @override
   void initState() {
     super.initState();
-    _packingList = widget.packingList;
+    items = widget.packingList.items;
+    checkedItems = widget.packingList.checkedItems;
+
+    // Initialize the animation controller
+    _progressAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    // Initialize with starting value
+    _progressAnimation = Tween<double>(
+      begin: 0,
+      end: items.isEmpty ? 0 : checkedItems.length / items.length,
+    ).animate(
+      CurvedAnimation(
+        parent: _progressAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // Start the animation
+    _progressAnimationController.forward();
+
+    categoriesRepository.getCategories().then((val) {
+      setState(() {
+        categories =
+            val.where((category) => widget.packingList.items.any((item) => item.categoryId == category.id)).toList();
+        dialogCategories = val;
+        selectedDialogCategory = categories.first;
+        itemsRepository
+            .getItems()
+            .then((value) => value.where((item) => item.categoryId == val.first.id).toList())
+            .then((value) => setState(() => itemsOnCategory = value));
+      });
+    });
+    Hive.box<PackingList>('packing_lists').listenable().addListener(() async {
+      if (mounted) {
+        final packingList = await packRepository.getPackingList(widget.packingList.id);
+        setState(() {
+          items = packingList?.items ?? [];
+          checkedItems = packingList?.checkedItems ?? [];
+          _updateProgressAnimation();
+          log(items.toString());
+          categoriesRepository
+              .getCategories()
+              .then((val) => val.where((category) => items.any((item) => item.categoryId == category.id)).toList())
+              .then((val) => categories = val)
+              .then((val) => log(categories.toString()))
+              .then((val) {
+            if (!categories.contains(selectedCategory)) {
+              selectedCategory = null;
+            }
+          });
+        });
+      }
+    });
   }
 
-  Future<void> _toggleItem(String categoryId, String itemId) async {
-    try {
-      // Persist changes
-      await widget.repository.toggleItem(_packingList.id, itemId);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Failed to update item'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-      }
+  @override
+  void dispose() {
+    _progressAnimationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _addItem(String name, String categoryId) async {
+    final item = await itemsRepository.addItem(name, categoryId);
+    if (mounted) {
+      await packRepository.addItem(widget.packingList.id, item);
+      setState(() {
+        if (selectedDialogCategory?.id == categoryId) {
+          itemsOnCategory = [item, ...itemsOnCategory];
+        }
+      });
     }
   }
 
-  Future<void> _deleteItem(String itemId) async {
-    await widget.repository.deleteItem(_packingList.id, itemId);
+  Future<void> _toggleDialogItem(PackingItem item) async {
+    if (!mounted) return;
+
+    if (items.contains(item)) {
+      await packRepository.deleteItem(widget.packingList.id, item.id);
+    } else {
+      await packRepository.addItem(widget.packingList.id, item);
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _updateProgressAnimation() {
+    // Create a new animation with updated values
+    _progressAnimation = Tween<double>(
+      begin: _progressAnimation.value,
+      end: items.isEmpty ? 0 : checkedItems.length / items.length,
+    ).animate(
+      CurvedAnimation(
+        parent: _progressAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // Reset and play the animation
+    _progressAnimationController
+      ..reset()
+      ..forward();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_packingList.name),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              // TODO: Implement edit functionality
-            },
-          ),
-        ],
+        title: Text(LocaleKeys.packing_list_items.tr()),
       ),
-      body: Column(
-        children: [
-          // Header section with overall progress
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (_packingList.description != null) ...[
-                  Text(
-                    _packingList.description!,
-                    style: Theme.of(context).textTheme.bodyLarge,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            useSafeArea: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) {
+              final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+              final isKeyboardVisible = keyboardHeight > 0;
+              final initiallySelectedItems = List<PackingItem>.from(items);
+              return Padding(
+                padding: EdgeInsets.only(bottom: isKeyboardVisible ? keyboardHeight : 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                ],
-                Row(
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: LinearProgressIndicator(
-                          value: _packingList.progress,
-                          minHeight: 8,
-                          backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Text(
-                      '${(_packingList.progress * 100).round()}%',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${_packingList.checkedItems}/${_packingList.totalItems} items packed',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
-          ),
-          // Categories and items list
-          Expanded(
-            child: _packingList.items.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.category_outlined,
-                          size: 64,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'No categories yet',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Add a category to start packing',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _packingList.items.length,
-                    itemBuilder: (context, index) {
-                      final item = _packingList.items[index];
-                      return _CategoryCard(
-                        item: item,
-                        onToggleItem: (itemId) => _toggleItem(item.id, itemId),
-                        onDeleteItem: _deleteItem,
-                        packingList: _packingList,
+                  child: DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: isKeyboardVisible ? 0.9 : 0.7,
+                    minChildSize: 0.5,
+                    maxChildSize: 0.95,
+                    builder: (context, scrollController) {
+                      return StatefulBuilder(
+                        key: UniqueKey(),
+                        builder: (context, setState) {
+                          return AddItem(
+                            categories: dialogCategories,
+                            items: itemsOnCategory,
+                            scrollController: scrollController,
+                            onAddItem: (item) {
+                              _addItem(item, selectedDialogCategory!.id);
+                            },
+                            onSelectCategory: (category) {
+                              setState(() => selectedDialogCategory = category);
+
+                              itemsRepository.getItems().then((value) {
+                                return value.where((item) => item.categoryId == selectedDialogCategory!.id).toList();
+                              }).then((value) {
+                                final newItems = value..removeWhere(initiallySelectedItems.contains);
+                                setState(() => itemsOnCategory = newItems);
+                              });
+                            },
+                            selectedCategory: selectedDialogCategory,
+                            onToggleItem: _toggleDialogItem,
+                            onDeleteItem: (item) {
+                              packRepository.deleteItem(widget.packingList.id, item.id);
+                              setState(() {
+                                itemsOnCategory.remove(item);
+                                checkedItems.remove(item);
+                              });
+                            },
+                            selectedItems: items,
+                            hideInitiallySelectedItems: true,
+                            initiallySelectedItems: initiallySelectedItems,
+                          );
+                        },
                       );
                     },
                   ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Implement add category/item functionality
+                ),
+              );
+            },
+          );
         },
         child: const Icon(Icons.add),
       ),
-    );
-  }
-}
-
-class _CategoryCard extends StatelessWidget {
-  const _CategoryCard({
-    required this.item,
-    required this.onToggleItem,
-    required this.packingList,
-    required this.onDeleteItem,
-  });
-
-  final PackingItem item;
-  final void Function(String itemId) onToggleItem;
-  final void Function(String itemId) onDeleteItem;
-  final PackingList packingList;
-
-  @override
-  Widget build(BuildContext context) {
-    final checkedItems = packingList.checkedItems.where((item) => item.categoryId == item.id).length;
-    final progress = checkedItems / item.quantity;
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          title: Row(
+      body: FutureBuilder<List<PackingItem>>(
+        future: selectedCategory == null
+            ? packRepository.getPackingList(widget.packingList.id).then((value) => value?.items ?? [])
+            : packRepository
+                .getPackingList(widget.packingList.id)
+                .then((value) => value?.items.where((item) => item.categoryId == selectedCategory?.id).toList() ?? []),
+        builder: (context, snapshot) {
+          return Column(
             children: [
-              Icon(
-                Icons.category_outlined,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
+              Container(
+                width: double.infinity,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      item.name,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.packingList.name,
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            '${checkedItems.length}/${items.length}',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: LinearProgressIndicator(
-                        value: progress,
-                        minHeight: 4,
-                        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+                    const SizedBox(height: 8),
+                    if (widget.packingList.description != null && widget.packingList.description!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          widget.packingList.description!,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today_outlined,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          DateFormat.yMMMd().format(widget.packingList.createdAt),
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                        ),
+                        const SizedBox(width: 16),
+                        if (categories.isNotEmpty) ...[
+                          Icon(
+                            Icons.category_outlined,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${categories.length} ${LocaleKeys.categories_all.tr()}',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                        ],
+                      ],
                     ),
+                    if (items.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${((checkedItems.length / items.length) * 100).toInt()}% ${LocaleKeys.packing_list_items.tr()}',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            AnimatedBuilder(
+                              animation: _progressAnimationController,
+                              builder: (context, child) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: LinearProgressIndicator(
+                                    value: _progressAnimation.value,
+                                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Theme.of(context).colorScheme.primary,
+                                    ),
+                                    minHeight: 8,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              Text(
-                '$checkedItems/${item.quantity}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedCategory = null;
+                                  });
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeInOut,
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: selectedCategory == null
+                                        ? Theme.of(context).colorScheme.primaryContainer
+                                        : Theme.of(context).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(32),
+                                    border: Border.all(
+                                      color: selectedCategory == null
+                                          ? Theme.of(context).colorScheme.primary
+                                          : Theme.of(context).colorScheme.outline,
+                                    ),
+                                  ),
+                                  child: Text(LocaleKeys.categories_all.tr()),
+                                ),
+                              ),
+                            ),
+                            for (final category in categories)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedCategory = category;
+                                    });
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeInOut,
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: selectedCategory?.id == category.id
+                                          ? Theme.of(context).colorScheme.primaryContainer
+                                          : Theme.of(context).colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(32),
+                                      border: Border.all(
+                                        color: selectedCategory?.id == category.id
+                                            ? Theme.of(context).colorScheme.primary
+                                            : Theme.of(context).colorScheme.outline,
+                                      ),
+                                    ),
+                                    child: Text(category.name.tr()),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
+                    const SizedBox(height: 16),
+                    if (snapshot.data!.isEmpty)
+                      Expanded(
+                        child: Center(
+                          child: Text(LocaleKeys.packing_list_no_items.tr()),
+                        ),
+                      ),
+                    if (snapshot.data!.isNotEmpty)
+                      Expanded(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => const SizedBox(height: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          itemBuilder: (context, index) {
+                            return ItemCard(
+                              item: snapshot.data![index],
+                              checkedItems: checkedItems,
+                              onToggle: () =>
+                                  packRepository.toggleItem(widget.packingList.id, snapshot.data![index].id),
+                              onDelete: () {
+                                packRepository.deleteItem(widget.packingList.id, snapshot.data![index].id);
+                                setState(() {
+                                  items.remove(snapshot.data![index]);
+                                  checkedItems.remove(snapshot.data![index]);
+                                });
+                              },
+                            );
+                          },
+                          itemCount: snapshot.data!.length,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ],
-          ),
-          children: [
-            if (item.quantity == 0)
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'No items in this category',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                      ),
-                ),
-              )
-            else
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                itemCount: item.quantity,
-                itemBuilder: (context, index) {
-                  return ItemCard(
-                    item: item,
-                    onToggle: () => onToggleItem(item.id),
-                    checkedItems: packingList.checkedItems,
-                    onDelete: () => onDeleteItem(item.id),
-                  );
-                },
-              ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
