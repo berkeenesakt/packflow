@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:packpal/core/providers/theme_provider.dart';
+import 'package:packpal/core/enums/locales.dart';
+import 'package:packpal/core/providers/app_settings_provider.dart';
 import 'package:packpal/generated/locale_keys.g.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,7 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final appSettings = Provider.of<AppSettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.navigation_titles_settings.tr()),
@@ -22,19 +23,14 @@ class SettingsView extends StatelessWidget {
           _buildSectionHeader(context, LocaleKeys.settings_appearance.tr()),
           _buildThemeSettingItem(
             context,
-            themeProvider,
+            appSettings,
           ),
 
           // Language section
           _buildSectionHeader(context, LocaleKeys.settings_language.tr()),
-          _buildSettingItem(
+          _buildLanguageSettingItem(
             context,
-            icon: Icons.language_outlined,
-            title: LocaleKeys.settings_app_language.tr(),
-            subtitle: context.locale.languageCode == 'en' ? 'English' : 'Türkçe',
-            onTap: () {
-              _showLanguageSelectionDialog(context);
-            },
+            appSettings,
           ),
 
           // Notifications section
@@ -82,9 +78,9 @@ class SettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildThemeSettingItem(BuildContext context, ThemeProvider themeProvider) {
+  Widget _buildThemeSettingItem(BuildContext context, AppSettingsProvider appSettings) {
     String themeText;
-    switch (themeProvider.themeMode) {
+    switch (appSettings.themeMode) {
       case ThemeMode.system:
         themeText = LocaleKeys.settings_theme_system.tr();
         break;
@@ -102,12 +98,24 @@ class SettingsView extends StatelessWidget {
       subtitle: Text(themeText),
       trailing: const Icon(Icons.chevron_right),
       onTap: () {
-        _showThemeSelectionDialog(context, themeProvider);
+        _showThemeSelectionDialog(context, appSettings);
       },
     );
   }
 
-  void _showThemeSelectionDialog(BuildContext context, ThemeProvider themeProvider) {
+  Widget _buildLanguageSettingItem(BuildContext context, AppSettingsProvider appSettings) {
+    return ListTile(
+      leading: Icon(Icons.language_outlined, color: Theme.of(context).colorScheme.primary),
+      title: Text(LocaleKeys.settings_app_language.tr()),
+      subtitle: Text(context.locale.languageCode == 'en' ? 'English' : 'Türkçe'),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () {
+        _showLanguageSelectionDialog(context, appSettings);
+      },
+    );
+  }
+
+  void _showThemeSelectionDialog(BuildContext context, AppSettingsProvider appSettings) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -119,9 +127,9 @@ class SettingsView extends StatelessWidget {
               title: Text(LocaleKeys.settings_theme_system.tr()),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.system,
-                groupValue: themeProvider.themeMode,
+                groupValue: appSettings.themeMode,
                 onChanged: (value) {
-                  themeProvider.setThemeMode(ThemeMode.system);
+                  appSettings.setThemeMode(ThemeMode.system);
                   Navigator.pop(context);
                 },
               ),
@@ -130,9 +138,9 @@ class SettingsView extends StatelessWidget {
               title: Text(LocaleKeys.settings_theme_light.tr()),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.light,
-                groupValue: themeProvider.themeMode,
+                groupValue: appSettings.themeMode,
                 onChanged: (value) {
-                  themeProvider.setThemeMode(ThemeMode.light);
+                  appSettings.setThemeMode(ThemeMode.light);
                   Navigator.pop(context);
                 },
               ),
@@ -141,9 +149,51 @@ class SettingsView extends StatelessWidget {
               title: Text(LocaleKeys.settings_theme_dark.tr()),
               leading: Radio<ThemeMode>(
                 value: ThemeMode.dark,
-                groupValue: themeProvider.themeMode,
+                groupValue: appSettings.themeMode,
                 onChanged: (value) {
-                  themeProvider.setThemeMode(ThemeMode.dark);
+                  appSettings.setThemeMode(ThemeMode.dark);
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(LocaleKeys.general_cancel.tr()),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLanguageSelectionDialog(BuildContext context, AppSettingsProvider appSettings) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(LocaleKeys.settings_select_language.tr()),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: const Text('English'),
+              leading: Radio<String>(
+                value: 'en',
+                groupValue: context.locale.languageCode,
+                onChanged: (value) {
+                  appSettings.setLocale(context, Locales.en.locale);
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            ListTile(
+              title: const Text('Türkçe'),
+              leading: Radio<String>(
+                value: 'tr',
+                groupValue: context.locale.languageCode,
+                onChanged: (value) {
+                  appSettings.setLocale(context, Locales.tr.locale);
                   Navigator.pop(context);
                 },
               ),
@@ -205,48 +255,6 @@ class SettingsView extends StatelessWidget {
         value: value,
         onChanged: onChanged,
         activeColor: Theme.of(context).colorScheme.primary,
-      ),
-    );
-  }
-
-  void _showLanguageSelectionDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(LocaleKeys.settings_select_language.tr()),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              title: const Text('English'),
-              leading: Radio<String>(
-                value: 'en',
-                groupValue: context.locale.languageCode,
-                onChanged: (value) {
-                  context.setLocale(const Locale('en'));
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            ListTile(
-              title: const Text('Türkçe'),
-              leading: Radio<String>(
-                value: 'tr',
-                groupValue: context.locale.languageCode,
-                onChanged: (value) {
-                  context.setLocale(const Locale('tr'));
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(LocaleKeys.general_cancel.tr()),
-          ),
-        ],
       ),
     );
   }
