@@ -145,7 +145,6 @@ class PackRoute extends PageRouteInfo<PackRouteArgs> {
       return PackView(
         key: args.key,
         packingList: args.packingList,
-        repository: args.repository,
       );
     },
   );

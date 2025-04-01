@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 
-class ItemCard extends StatelessWidget {
+class ItemCard extends StatefulWidget {
   const ItemCard({
     required this.item,
     required this.onToggle,
@@ -16,42 +16,52 @@ class ItemCard extends StatelessWidget {
   final List<PackingItem>? checkedItems;
 
   @override
-  Widget build(BuildContext context) {
-    final isChecked = checkedItems?.contains(item) ?? false;
-    final colorScheme = Theme.of(context).colorScheme;
+  State<ItemCard> createState() => _ItemCardState();
+}
 
+class _ItemCardState extends State<ItemCard> {
+  bool isResizing = false;
+  @override
+  Widget build(BuildContext context) {
+    final isChecked = widget.checkedItems?.contains(widget.item) ?? false;
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
+          width: isResizing ? 0 : 1,
           color: isChecked ? colorScheme.primary.withOpacity(0.3) : colorScheme.outline.withOpacity(0.2),
         ),
       ),
       child: ClipRRect(
+        key: Key(widget.item.id),
         borderRadius: BorderRadius.circular(12),
         child: Material(
           color: isChecked ? colorScheme.surfaceContainerHighest.withOpacity(0.5) : colorScheme.surface,
           child: InkWell(
-            onTap: onToggle,
+            onTap: widget.onToggle,
             borderRadius: BorderRadius.circular(12),
             child: Dismissible(
-              key: Key(item.id),
+              key: Key(widget.item.id),
+              onResize: () {
+                setState(() => isResizing = true);
+              },
               direction: DismissDirection.endToStart,
-              onDismissed: (_) => onDelete(),
+              onDismissed: (_) => widget.onDelete(),
               confirmDismiss: (direction) async {
                 return showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text('Delete item'),
-                    content: Text('Are you sure you want to delete this item?'),
+                    title: const Text('Delete item'),
+                    content: const Text('Are you sure you want to delete this item?'),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(false),
-                        child: Text('Cancel'),
+                        child: const Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(true),
-                        child: Text('Delete'),
+                        child: const Text('Delete'),
                       ),
                     ],
                   ),
@@ -102,15 +112,15 @@ class ItemCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            item.name,
+                            widget.item.name,
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                   color: colorScheme.onSurface,
                                 ),
                           ),
-                          if (item.notes != null) ...[
+                          if (widget.item.notes != null) ...[
                             const SizedBox(height: 4),
                             Text(
-                              item.notes!,
+                              widget.item.notes!,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: colorScheme.onSurface.withOpacity(0.6),
                                   ),
@@ -119,7 +129,7 @@ class ItemCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (item.quantity > 1) ...[
+                    if (widget.item.quantity > 1) ...[
                       const SizedBox(width: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -128,7 +138,7 @@ class ItemCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          'x${item.quantity}',
+                          'x${widget.item.quantity}',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: colorScheme.primary,
                                 fontWeight: FontWeight.bold,
