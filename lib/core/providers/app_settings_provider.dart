@@ -7,6 +7,12 @@ import 'package:packpal/core/enums/locales.dart';
 import 'package:packpal/core/theme/app_theme.dart';
 
 class AppSettingsProvider extends ChangeNotifier {
+  AppSettingsProvider({Box<dynamic>? box}) : _box = box ?? Hive.box(_boxName) {
+    // Load saved settings
+    _loadSettings();
+    // Initialize theme
+    _initializeTheme();
+  }
   // Constants for Hive storage
   static const String _boxName = 'app_settings';
   static const String _themeKey = 'theme_mode';
@@ -18,14 +24,7 @@ class AppSettingsProvider extends ChangeNotifier {
   // Language settings
   Locale _locale = const Locale('en');
 
-  final Box _box;
-
-  AppSettingsProvider({Box? box}) : _box = box ?? Hive.box(_boxName) {
-    // Load saved settings
-    _loadSettings();
-    // Initialize theme
-    _initializeTheme();
-  }
+  final Box<dynamic> _box;
 
   // THEME RELATED GETTERS AND METHODS
   // Get current theme mode
@@ -96,12 +95,14 @@ class AppSettingsProvider extends ChangeNotifier {
   // Update system UI style based on current theme
   void _updateSystemUIOverlayStyle() {
     final isDark = isDarkMode;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
-      systemNavigationBarColor: isDark ? AppTheme.darkColorScheme.background : AppTheme.lightColorScheme.background,
-      systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        systemNavigationBarColor: isDark ? AppTheme.darkColorScheme.surface : AppTheme.lightColorScheme.surface,
+        systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+      ),
+    );
   }
 
   // LANGUAGE RELATED GETTERS AND METHODS

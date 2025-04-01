@@ -24,7 +24,7 @@ class AppInit {
 
     // Open Hive boxes
     await Hive.openBox<bool>('app');
-    await Hive.openBox('app_settings');
+    await Hive.openBox<dynamic>('app_settings');
     await Hive.openBox<PackingList>('packing_lists');
     await Hive.openBox<PackingCategory>('categories');
     await Hive.openBox<PackingItem>('packing_items');

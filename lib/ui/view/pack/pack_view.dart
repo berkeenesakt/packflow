@@ -158,7 +158,7 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await showModalBottomSheet(
+          await showModalBottomSheet<void>(
             context: context,
             isScrollControlled: true,
             useSafeArea: true,

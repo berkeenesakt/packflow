@@ -83,13 +83,10 @@ class SettingsView extends StatelessWidget {
     switch (appSettings.themeMode) {
       case ThemeMode.system:
         themeText = LocaleKeys.settings_theme_system.tr();
-        break;
       case ThemeMode.light:
         themeText = LocaleKeys.settings_theme_light.tr();
-        break;
       case ThemeMode.dark:
         themeText = LocaleKeys.settings_theme_dark.tr();
-        break;
     }
 
     return ListTile(
@@ -116,7 +113,7 @@ class SettingsView extends StatelessWidget {
   }
 
   void _showThemeSelectionDialog(BuildContext context, AppSettingsProvider appSettings) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(LocaleKeys.settings_select_theme.tr()),
@@ -169,7 +166,7 @@ class SettingsView extends StatelessWidget {
   }
 
   void _showLanguageSelectionDialog(BuildContext context, AppSettingsProvider appSettings) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(LocaleKeys.settings_select_language.tr()),
@@ -227,8 +224,8 @@ class SettingsView extends StatelessWidget {
     BuildContext context, {
     required IconData icon,
     required String title,
-    String? subtitle,
     required VoidCallback onTap,
+    String? subtitle,
   }) {
     return ListTile(
       leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
@@ -243,9 +240,9 @@ class SettingsView extends StatelessWidget {
     BuildContext context, {
     required IconData icon,
     required String title,
-    String? subtitle,
     required bool value,
     required ValueChanged<bool> onChanged,
+    String? subtitle,
   }) {
     return ListTile(
       leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
