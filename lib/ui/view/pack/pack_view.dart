@@ -66,12 +66,12 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
     // Start the animation
     _progressAnimationController.forward();
 
-    categoriesRepository.getCategories().then((val) {
+    categoriesRepository.getCategories().then((val) async {
       setState(() {
         categories =
             val.where((category) => widget.packingList.items.any((item) => item.categoryId == category.id)).toList();
+        selectedDialogCategory = categories.isNotEmpty ? categories.first : val.first;
         dialogCategories = val;
-        selectedDialogCategory = categories.first;
         itemsRepository
             .getItems()
             .then((value) => value.where((item) => item.categoryId == val.first.id).toList())
