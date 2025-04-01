@@ -14,7 +14,13 @@ class ItemsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.items_title.tr()),
+        title: Text(
+          LocaleKeys.items_title.tr(),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+        ),
       ),
       body: provider.isLoading
           ? const Center(

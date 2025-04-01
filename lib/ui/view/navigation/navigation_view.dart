@@ -75,7 +75,9 @@ class _NavigationViewState extends State<NavigationView> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.black.withOpacity(0.2)
+                  : Colors.grey.withOpacity(0.2),
               spreadRadius: 3,
               blurRadius: 10,
               offset: const Offset(0, -1),
@@ -87,7 +89,7 @@ class _NavigationViewState extends State<NavigationView> {
           fabLocation: StylishBarFabLocation.center,
           notchStyle: NotchStyle.circle,
           hasNotch: true,
-          backgroundColor: const Color.fromARGB(255, 247, 247, 247),
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
           items: [
             BottomBarItem(
               selectedColor: Colors.blue,

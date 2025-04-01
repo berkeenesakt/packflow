@@ -77,5 +77,46 @@
         "empty_state": "Henüz eşya eklenmedi. Aşağıdaki formu kullanarak eşya ekleyin.",
         "add_new": "Yeni Eşya Ekle",
         "delete_confirm": "Bu eşyayı silmek istediğinizden emin misiniz?"
+    },
+    "home": {
+        "recent_packing_lists": "Son Paketleme Listeleri",
+        "continue_packing": "Paketlemeye Devam Et",
+        "smart_suggestions": "Akıllı Öneriler",
+        "upcoming_trips": "Yaklaşan Seyahatler",
+        "weather_updates": "Hava Durumu Güncellemeleri",
+        "travel_tip": "Seyahat İpucu",
+        "create_new_list": "Yeni Liste Oluştur",
+        "view_all": "Tümünü Görüntüle",
+        "continue_packing_description": "Kaldığınız yerden devam edin",
+        "no_packing_lists": "Henüz paketleme listesi yok",
+        "create_your_first": "İlk paketleme listenizi oluşturun",
+        "passport_reminder": "Pasaportunuzu paketlemeyi unutmayın!",
+        "charger_reminder": "Şarj cihazlarınızı getirmeyi unutmayın!",
+        "medicine_reminder": "Gerekli ilaçları paketleyin",
+        "fully_packed": "Tamamen Paketlenmiş",
+        "fully_packed_description": "Gitmeye hazır listeler"
+    },
+    "settings": {
+        "appearance": "Görünüm",
+        "theme": "Tema",
+        "theme_system": "Sistem (Varsayılan)",
+        "theme_light": "Açık",
+        "theme_dark": "Koyu",
+        "language": "Dil",
+        "app_language": "Uygulama Dili",
+        "select_language": "Dil Seçin",
+        "select_theme": "Tema Seçin",
+        "notifications": "Bildirimler",
+        "trip_reminders": "Seyahat Hatırlatıcıları",
+        "trip_reminders_desc": "Seyahatinizden önce bildirimler alın",
+        "about": "Hakkında",
+        "version": "Uygulama Sürümü",
+        "privacy": "Gizlilik Politikası",
+        "feedback": "Geri Bildirim Gönder"
+    },
+    "general": {
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "delete": "Sil"
     }
 }

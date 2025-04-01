@@ -122,16 +122,14 @@ class OnboardingRoute extends PageRouteInfo<void> {
 /// [PackView]
 class PackRoute extends PageRouteInfo<PackRouteArgs> {
   PackRoute({
-    Key? key,
     required PackingList packingList,
-    required PackingListRepository repository,
+    Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           PackRoute.name,
           args: PackRouteArgs(
-            key: key,
             packingList: packingList,
-            repository: repository,
+            key: key,
           ),
           initialChildren: children,
         );
@@ -143,8 +141,8 @@ class PackRoute extends PageRouteInfo<PackRouteArgs> {
     builder: (data) {
       final args = data.argsAs<PackRouteArgs>();
       return PackView(
-        key: args.key,
         packingList: args.packingList,
+        key: args.key,
       );
     },
   );
@@ -152,18 +150,17 @@ class PackRoute extends PageRouteInfo<PackRouteArgs> {
 
 class PackRouteArgs {
   const PackRouteArgs({
-    this.key,
     required this.packingList,
-    required this.repository,
+    this.key,
   });
 
-  final Key? key;
   final PackingList packingList;
-  final PackingListRepository repository;
+
+  final Key? key;
 
   @override
   String toString() {
-    return 'PackRouteArgs{key: $key, packingList: $packingList, repository: $repository}';
+    return 'PackRouteArgs{packingList: $packingList, key: $key}';
   }
 }
 
@@ -211,6 +208,25 @@ class PackingListsRouteArgs {
   String toString() {
     return 'PackingListsRouteArgs{repository: $repository, key: $key}';
   }
+}
+
+/// generated route for
+/// [SettingsView]
+class SettingsRoute extends PageRouteInfo<void> {
+  const SettingsRoute({List<PageRouteInfo>? children})
+      : super(
+          SettingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingsView();
+    },
+  );
 }
 
 /// generated route for
