@@ -14,6 +14,7 @@ abstract class  LocaleKeys {
   static const onboarding = 'onboarding';
   static const navigation_titles_home = 'navigation_titles.home';
   static const navigation_titles_packs = 'navigation_titles.packs';
+  static const navigation_titles_items = 'navigation_titles.items';
   static const navigation_titles_settings = 'navigation_titles.settings';
   static const navigation_titles = 'navigation_titles';
   static const add_sheet_choose_an_option = 'add_sheet.choose_an_option';
@@ -22,6 +23,7 @@ abstract class  LocaleKeys {
   static const add_sheet_add_category = 'add_sheet.add_category';
   static const add_sheet = 'add_sheet';
   static const packing_list_create_title = 'packing_list.create_title';
+  static const packing_list_add_item_title = 'packing_list.add_item_title';
   static const packing_list_edit_title = 'packing_list.edit_title';
   static const packing_list_name_label = 'packing_list.name_label';
   static const packing_list_name_hint = 'packing_list.name_hint';
@@ -58,6 +60,7 @@ abstract class  LocaleKeys {
   static const date_picker_unavailable_checkout_error = 'date_picker.unavailable_checkout_error';
   static const date_picker = 'date_picker';
   static const categories_all = 'categories.all';
+  static const categories_categories = 'categories.categories';
   static const categories_electronics = 'categories.electronics';
   static const categories_clothes = 'categories.clothes';
   static const categories_toiletries = 'categories.toiletries';
@@ -65,5 +68,11 @@ abstract class  LocaleKeys {
   static const categories_documents = 'categories.documents';
   static const categories_add_new = 'categories.add_new';
   static const categories = 'categories';
+  static const items_title = 'items.title';
+  static const items_manage_items = 'items.manage_items';
+  static const items_empty_state = 'items.empty_state';
+  static const items_add_new = 'items.add_new';
+  static const items_delete_confirm = 'items.delete_confirm';
+  static const items = 'items';
 
 }

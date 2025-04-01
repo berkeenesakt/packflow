@@ -1,11 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:packpal/core/providers/items_provider.dart';
+import 'package:packpal/core/repositories/hive_categories_repository.dart';
+import 'package:packpal/core/repositories/hive_items_repository.dart';
 import 'package:packpal/core/repositories/hive_packing_list_repository.dart';
 import 'package:packpal/core/router/app_router.dart';
 import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packpal/ui/items/items_view.dart';
 import 'package:packpal/ui/view/home_view.dart';
 import 'package:packpal/ui/view/packing_list/packing_lists_view.dart';
+import 'package:packpal/ui/view/settings/settings_view.dart';
+import 'package:provider/provider.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 @RoutePage()
@@ -22,6 +28,14 @@ class _NavigationViewState extends State<NavigationView> {
   final List<Widget> pagesList = [
     const HomeView(),
     PackingListsView(repository: HivePackingListRepository()),
+    ChangeNotifierProvider(
+      create: (context) => ItemsProvider(
+        itemsRepository: HiveItemsRepository(),
+        categoriesRepository: HiveCategoriesRepository(),
+      ),
+      child: const ItemsView(),
+    ),
+    const SettingsView(),
   ];
 
   final TextStyle labelStyle = const TextStyle(fontSize: 11);
@@ -89,6 +103,14 @@ class _NavigationViewState extends State<NavigationView> {
               title: Text(
                 style: labelStyle,
                 LocaleKeys.navigation_titles_packs.tr(),
+              ),
+            ),
+            BottomBarItem(
+              selectedColor: Colors.blue,
+              icon: const Icon(Icons.list),
+              title: Text(
+                style: labelStyle,
+                LocaleKeys.navigation_titles_items.tr(),
               ),
             ),
             BottomBarItem(

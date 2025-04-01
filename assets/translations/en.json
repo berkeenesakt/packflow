@@ -12,6 +12,7 @@
     "navigation_titles": {
         "home": "Home",
         "packs": "Packs",
+        "items": "Items",
         "settings": "Settings"
     },
     "add_sheet": {
@@ -22,6 +23,7 @@
     },
     "packing_list": {
         "create_title": "Create Packing List",
+        "add_item_title": "Add Item",
         "edit_title": "Edit Packing List",
         "name_label": "Name",
         "name_hint": "Enter a name for your packing list",
@@ -61,12 +63,20 @@
     },
     "categories": {
         "all": "All",
+        "categories": "Categories",
         "electronics": "Electronics",
         "clothes": "Clothes",
         "toiletries": "Toiletries",
         "essentials": "Essentials",
         "documents": "Documents",
         "add_new": "Add New Category"
+    },
+    "items": {
+        "title": "My Items",
+        "manage_items": "Manage Items",
+        "empty_state": "No items added yet. Add some items using the form below.",
+        "add_new": "Add New Item",
+        "delete_confirm": "Are you sure you want to delete this item?"
     }
 }
     

@@ -12,6 +12,7 @@
     "navigation_titles": {
         "home": "Ana Sayfa",
         "packs": "Paketler",
+        "items": "Eşyalar",
         "settings": "Ayarlar"
     },
     "add_sheet": {
@@ -22,6 +23,7 @@
     },
     "packing_list": {
         "create_title": "Paketleme Listesi Oluştur",
+        "add_item_title": "Eşya Ekle",
         "edit_title": "Paketleme Listesini Düzenle",
         "name_label": "İsim",
         "name_hint": "Paketleme listeniz için bir isim girin",
@@ -61,11 +63,19 @@
     },
     "categories": {
         "all": "Tümü",
+        "categories": "Kategoriler",
         "electronics": "Elektronik",
         "clothes": "Kıyafetler",
         "toiletries": "Banyo Malzemeleri",
         "essentials": "Temel Malzemeler",
         "documents": "Belgeler",
         "add_new": "Yeni Kategori Ekle"
+    },
+    "items": {
+        "title": "Eşyalarım",
+        "manage_items": "Eşyaları Yönet",
+        "empty_state": "Henüz eşya eklenmedi. Aşağıdaki formu kullanarak eşya ekleyin.",
+        "add_new": "Yeni Eşya Ekle",
+        "delete_confirm": "Bu eşyayı silmek istediğinizden emin misiniz?"
     }
 }
