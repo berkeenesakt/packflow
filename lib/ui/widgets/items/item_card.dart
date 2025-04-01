@@ -11,7 +11,7 @@ class ItemCard extends StatefulWidget {
   });
 
   final PackingItem item;
-  final VoidCallback onToggle;
+  final VoidCallback? onToggle;
   final VoidCallback onDelete;
   final List<PackingItem>? checkedItems;
 
@@ -39,7 +39,7 @@ class _ItemCardState extends State<ItemCard> {
         child: Material(
           color: isChecked ? colorScheme.surfaceContainerHighest.withOpacity(0.5) : colorScheme.surface,
           child: InkWell(
-            onTap: widget.onToggle,
+            onTap: widget.onToggle != null ? () => widget.onToggle!() : null,
             borderRadius: BorderRadius.circular(12),
             child: Dismissible(
               key: Key(widget.item.id),
@@ -86,27 +86,30 @@ class _ItemCardState extends State<ItemCard> {
                 ),
                 child: Row(
                   children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isChecked ? colorScheme.primary : colorScheme.outline,
-                          width: 2,
+                    Visibility(
+                      visible: widget.onToggle != null,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 24,
+                        height: 24,
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isChecked ? colorScheme.primary : colorScheme.outline,
+                            width: 2,
+                          ),
+                          color: isChecked ? colorScheme.primary : Colors.transparent,
                         ),
-                        color: isChecked ? colorScheme.primary : Colors.transparent,
+                        child: isChecked
+                            ? Icon(
+                                Icons.check,
+                                size: 16,
+                                color: colorScheme.onPrimary,
+                              )
+                            : null,
                       ),
-                      child: isChecked
-                          ? Icon(
-                              Icons.check,
-                              size: 16,
-                              color: colorScheme.onPrimary,
-                            )
-                          : null,
                     ),
-                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

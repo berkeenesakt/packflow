@@ -1,18 +1,223 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gen/gen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:packpal/core/providers/home_provider.dart';
+import 'package:packpal/core/repositories/hive_packing_list_repository.dart';
+import 'package:packpal/core/router/app_router.dart';
+import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packpal/ui/widgets/app_filled_button.dart';
+import 'package:packpal/ui/widgets/home/info_card.dart';
+import 'package:packpal/ui/widgets/home/packing_list_card.dart';
+import 'package:packpal/ui/widgets/home/section_header.dart';
+import 'package:provider/provider.dart';
 
 @RoutePage()
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  late HomeProvider _homeProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _homeProvider = HomeProvider(
+      packingListRepository: HivePackingListRepository(),
+    );
+
+    // Listen for changes in packing lists
+    Hive.box<PackingList>('packing_lists').listenable().addListener(() {
+      _homeProvider.refresh();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PackPal'),
+    return ChangeNotifierProvider.value(
+      value: _homeProvider,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(LocaleKeys.navigation_titles_home.tr()),
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await Future<void>.delayed(const Duration(milliseconds: 400));
+            _homeProvider.refresh();
+          },
+          child: Consumer<HomeProvider>(
+            builder: (context, provider, _) {
+              if (provider.isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  // Continue Packing section
+                  if (provider.inProgressLists.isNotEmpty) ...[
+                    SectionHeader(
+                      title: LocaleKeys.home_continue_packing,
+                      icon: Icons.edit_outlined,
+                      iconColor: Colors.orange,
+                      onViewAll: () {
+                        // Navigate to packs tab
+                        context.router.navigate(const NavigationRoute());
+                      },
+                    ),
+                    ...provider.inProgressLists.map(
+                      (list) {
+                        return Column(
+                          children: [
+                            PackingListCard(
+                              packingList: list,
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+
+                  // Recent Lists section
+                  if (provider.recentLists.isNotEmpty) ...[
+                    SectionHeader(
+                      title: LocaleKeys.home_recent_packing_lists,
+                      icon: Icons.history_outlined,
+                      onViewAll: () {
+                        // Navigate to packs tab
+                        context.router.navigate(const NavigationRoute());
+                      },
+                    ),
+                    ...provider.recentLists.map(
+                      (list) {
+                        return Column(
+                          children: [
+                            PackingListCard(packingList: list),
+                            const SizedBox(height: 8),
+                          ],
+                        );
+                      },
+                    ),
+                  ] else ...[
+                    _buildEmptyState(context),
+                  ],
+
+                  const SizedBox(height: 16),
+
+                  // Upcoming Trips section
+                  if (provider.upcomingTrips.isNotEmpty) ...[
+                    const SectionHeader(
+                      title: LocaleKeys.home_upcoming_trips,
+                      icon: Icons.flight_takeoff_outlined,
+                      iconColor: Colors.deepPurple,
+                    ),
+                    ...provider.upcomingTrips.map(
+                      (list) => Column(
+                        children: [
+                          PackingListCard(packingList: list),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
+                  // Fully Packed section
+                  if (provider.fullyPackedLists.isNotEmpty) ...[
+                    const SectionHeader(
+                      title: LocaleKeys.home_fully_packed,
+                      icon: Icons.check_circle_outline,
+                      iconColor: Colors.green,
+                    ),
+                    ...provider.fullyPackedLists.map(
+                      (list) {
+                        return Column(
+                          children: [
+                            PackingListCard(
+                              packingList: list,
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+
+                  // Travel Tip section
+                  Visibility(
+                    visible: false,
+                    child: Column(
+                      children: [
+                        const SectionHeader(
+                          title: LocaleKeys.home_travel_tip,
+                          icon: Icons.lightbulb_outline,
+                          iconColor: Colors.amber,
+                        ),
+                        InfoCard(
+                          title: LocaleKeys.home_travel_tip,
+                          content: provider.travelTip,
+                          icon: Icons.lightbulb_outline,
+                          cardColor: const Color(0xFFFFF8E1),
+                          iconColor: Colors.amber,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              );
+            },
+          ),
+        ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.backpack_outlined,
+              size: 64,
+              color: Colors.grey,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              LocaleKeys.home_no_packing_lists.tr(),
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              LocaleKeys.home_create_your_first.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            AppFilledButton(
+              onPressed: () {
+                context.router.push(
+                  CreatePackingListRoute(repository: HivePackingListRepository()),
+                );
+              },
+              text: LocaleKeys.home_create_new_list.tr(),
+            ),
+          ],
+        ),
       ),
     );
   }

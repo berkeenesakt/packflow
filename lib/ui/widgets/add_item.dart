@@ -28,7 +28,7 @@ class AddItem extends StatefulWidget {
 
   final void Function(PackingCategory) onSelectCategory;
 
-  final void Function(PackingItem) onToggleItem;
+  final void Function(PackingItem)? onToggleItem;
 
   final void Function(PackingItem) onDeleteItem;
 
@@ -81,10 +81,11 @@ class _AddItemState extends State<AddItem> {
       controller: widget.scrollController,
       child: Padding(
         padding: EdgeInsets.only(
-          top: 16,
+          top: widget.onToggleItem != null ? 16 : 0,
           bottom: MediaQuery.of(context).viewInsets.bottom + 16,
         ),
         child: Column(
+          crossAxisAlignment: widget.hideInitiallySelectedItems ? CrossAxisAlignment.center : CrossAxisAlignment.start,
           children: [
             if (widget.hideInitiallySelectedItems == true) ...[
               Container(
@@ -97,7 +98,15 @@ class _AddItemState extends State<AddItem> {
                 ),
               ),
             ],
-            Text(LocaleKeys.packing_list_items.tr(), style: Theme.of(context).textTheme.titleMedium),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                widget.onToggleItem != null
+                    ? LocaleKeys.packing_list_items.tr()
+                    : LocaleKeys.categories_categories.tr(),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
@@ -150,7 +159,7 @@ class _AddItemState extends State<AddItem> {
                     child: AppTextFormField(
                       focusNode: _itemNameFocusNode,
                       controller: _textFieldController,
-                      labelText: LocaleKeys.packing_list_item_name.tr(),
+                      labelText: LocaleKeys.packing_list_add_item_title.tr(),
                       hintText: LocaleKeys.packing_list_item_name.tr(),
                       onSubmit: (value) async {
                         if (!_itemFormKey.currentState!.validate()) return;
@@ -192,7 +201,7 @@ class _AddItemState extends State<AddItem> {
                         return ItemCard(
                           key: Key(item.id),
                           item: item,
-                          onToggle: () => widget.onToggleItem(item),
+                          onToggle: widget.onToggleItem != null ? () => widget.onToggleItem!(item) : null,
                           checkedItems: widget.selectedItems,
                           onDelete: () => widget.onDeleteItem(item),
                         );

@@ -40,7 +40,7 @@ class AppTextFormField extends StatelessWidget {
             suffixIcon: onSubmit != null
                 ? IconButton(
                     onPressed: () => onSubmit!(localController.text),
-                    icon: const Icon(Icons.arrow_forward),
+                    icon: const Icon(Icons.add),
                   )
                 : null,
             hintText: hintText,

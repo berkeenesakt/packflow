@@ -12,6 +12,7 @@
     "navigation_titles": {
         "home": "Home",
         "packs": "Packs",
+        "items": "Items",
         "settings": "Settings"
     },
     "add_sheet": {
@@ -22,6 +23,7 @@
     },
     "packing_list": {
         "create_title": "Create Packing List",
+        "add_item_title": "Add Item",
         "edit_title": "Edit Packing List",
         "name_label": "Name",
         "name_hint": "Enter a name for your packing list",
@@ -61,12 +63,61 @@
     },
     "categories": {
         "all": "All",
+        "categories": "Categories",
         "electronics": "Electronics",
         "clothes": "Clothes",
         "toiletries": "Toiletries",
         "essentials": "Essentials",
         "documents": "Documents",
         "add_new": "Add New Category"
+    },
+    "items": {
+        "title": "My Items",
+        "manage_items": "Manage Items",
+        "empty_state": "No items added yet. Use the form below to add an item.",
+        "add_new": "Add New Item",
+        "delete_confirm": "Are you sure you want to delete this item?"
+    },
+    "home": {
+        "recent_packing_lists": "Recent Packing Lists",
+        "continue_packing": "Continue Packing",
+        "smart_suggestions": "Smart Suggestions",
+        "upcoming_trips": "Upcoming Trips",
+        "weather_updates": "Weather Updates",
+        "travel_tip": "Travel Tip",
+        "create_new_list": "Create New List",
+        "view_all": "View All",
+        "continue_packing_description": "Get back to where you left off",
+        "no_packing_lists": "No packing lists yet",
+        "create_your_first": "Create your first packing list",
+        "passport_reminder": "Don't forget to pack your passport!",
+        "charger_reminder": "Remember to bring your chargers!",
+        "medicine_reminder": "Pack any necessary medications",
+        "fully_packed": "Fully Packed",
+        "fully_packed_description": "Lists that are ready to go"
+    },
+    "settings": {
+        "appearance": "Appearance",
+        "theme": "Theme",
+        "theme_system": "System (Default)",
+        "theme_light": "Light",
+        "theme_dark": "Dark",
+        "language": "Language",
+        "app_language": "App Language",
+        "select_language": "Select Language",
+        "select_theme": "Select Theme",
+        "notifications": "Notifications",
+        "trip_reminders": "Trip Reminders",
+        "trip_reminders_desc": "Get notifications before your trip",
+        "about": "About",
+        "version": "App Version",
+        "privacy": "Privacy Policy",
+        "feedback": "Send Feedback"
+    },
+    "general": {
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete"
     }
 }
     

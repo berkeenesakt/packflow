@@ -16,6 +16,15 @@ class HiveItemsRepository implements ItemsRepository {
 
   @override
   Future<void> deleteItem(String itemId) async {
+    //Scan for all packing lists that contain the item
+    final packingLists = Hive.box<PackingList>('packing_lists')
+        .values
+        .where((list) => list.items.any((item) => item.id == itemId))
+        .toList();
+    for (final list in packingLists) {
+      list.items.removeWhere((item) => item.id == itemId);
+      await Hive.box<PackingList>('packing_lists').put(list.id, list);
+    }
     await Hive.box<PackingItem>('packing_items').delete(itemId);
   }
 

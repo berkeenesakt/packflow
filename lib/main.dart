@@ -2,12 +2,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:packpal/core/init/app_init.dart';
 import 'package:packpal/core/init/localization.dart';
+import 'package:packpal/core/providers/theme_provider.dart';
 import 'package:packpal/core/router/app_router.dart';
-import 'package:packpal/core/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await AppInit.init();
-  runApp(Localization(child: MyApp()));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: Localization(child: MyApp()),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,10 +25,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp.router(
       title: 'PackPal',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: themeProvider.themeData,
+      darkTheme: themeProvider.themeData,
+      themeMode: themeProvider.themeMode,
       routerConfig: _appRouter.config(),
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,

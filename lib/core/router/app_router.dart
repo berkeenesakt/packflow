@@ -8,6 +8,7 @@ import 'package:packpal/ui/view/onboarding/onboarding_view.dart';
 import 'package:packpal/ui/view/pack/pack_view.dart';
 import 'package:packpal/ui/view/packing_list/create_packing_list_view.dart';
 import 'package:packpal/ui/view/packing_list/packing_lists_view.dart';
+import 'package:packpal/ui/view/settings/settings_view.dart';
 import 'package:packpal/ui/view/splash/splash_view.dart';
 
 part 'app_router.gr.dart';
@@ -22,5 +23,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: NavigationRoute.page, path: '/navigation'),
         AutoRoute(page: CreatePackingListRoute.page, path: '/create-packing-list'),
         AutoRoute(page: PackRoute.page, path: '/pack'),
+        AutoRoute(page: SettingsRoute.page, path: '/settings'),
       ];
 }
