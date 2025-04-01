@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:packpal/core/init/app_init.dart';
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
 
     // Apply saved locale
     if (context.locale != appSettings.locale) {
+      log('Setting locale to ${appSettings.locale}');
       Future.microtask(() => context.setLocale(appSettings.locale));
     }
 

@@ -1,13 +1,17 @@
 import 'package:gen/gen.dart';
 import 'package:hive/hive.dart';
 import 'package:packpal/core/repositories/packing_list_repository.dart';
+import 'package:packpal/core/services/notification_service.dart';
 
 class HivePackingListRepository implements PackingListRepository {
   HivePackingListRepository({
     Box<PackingList>? packingListBox,
-  }) : _packingListBox = packingListBox ?? Hive.box<PackingList>('packing_lists');
+    NotificationService? notificationService,
+  })  : _packingListBox = packingListBox ?? Hive.box<PackingList>('packing_lists'),
+        _notificationService = notificationService ?? NotificationService();
 
   final Box<PackingList> _packingListBox;
+  final NotificationService _notificationService;
 
   @override
   Future<List<PackingList>> getAllPackingLists() async {
@@ -24,15 +28,22 @@ class HivePackingListRepository implements PackingListRepository {
   @override
   Future<void> createPackingList(PackingList packingList) async {
     await _packingListBox.put(packingList.id, packingList);
+    await _notificationService.schedulePackingReminder(packingList);
   }
 
   @override
   Future<void> updatePackingList(PackingList packingList) async {
+    await _notificationService.cancelPackingReminder(packingList);
     await _packingListBox.put(packingList.id, packingList);
+    await _notificationService.schedulePackingReminder(packingList);
   }
 
   @override
   Future<void> deletePackingList(String id) async {
+    final packingList = await getPackingList(id);
+    if (packingList != null) {
+      await _notificationService.cancelPackingReminder(packingList);
+    }
     await _packingListBox.delete(id);
   }
 

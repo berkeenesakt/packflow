@@ -3,12 +3,21 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:packpal/core/enums/locales.dart';
 import 'package:packpal/core/providers/app_settings_provider.dart';
+import 'package:packpal/core/services/notification_service.dart';
 import 'package:packpal/generated/locale_keys.g.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
-class SettingsView extends StatelessWidget {
+class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
+
+  @override
+  State<SettingsView> createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
+  final NotificationService _notificationService = NotificationService();
+  bool _notificationsEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +49,19 @@ class SettingsView extends StatelessWidget {
             icon: Icons.notifications_outlined,
             title: LocaleKeys.settings_trip_reminders.tr(),
             subtitle: LocaleKeys.settings_trip_reminders_desc.tr(),
-            value: false,
-            onChanged: (value) {
-              // TODO: Implement notification toggle
+            value: _notificationsEnabled,
+            onChanged: (value) async {
+              setState(() {
+                _notificationsEnabled = value;
+              });
+
+              if (value) {
+                // Request permissions if enabling notifications
+                await _notificationService.requestPermissions();
+              } else {
+                // Cancel all notifications if disabling
+                await _notificationService.cancelAllNotifications();
+              }
             },
           ),
 

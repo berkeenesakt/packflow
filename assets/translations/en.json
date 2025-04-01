@@ -7,7 +7,11 @@
         "smart_reminders": "Smart Reminders",
         "get_reminded_to_check_your_list_before_departure": "Get reminded to check your list before departure",
         "login": "Login",
-        "continue_without_login": "Continue without login"
+        "continue_without_login": "Continue without login",
+        "enable_notifications": "Enable Notifications",
+        "requesting_permissions": "Requesting permissions...",
+        "skip": "Skip",
+        "notification_permission_failed": "Failed to request notification permission"
     },
     "navigation_titles": {
         "home": "Home",
@@ -118,6 +122,12 @@
         "cancel": "Cancel",
         "save": "Save",
         "delete": "Delete"
+    },
+    "notifications": {
+        "packing_reminder_title": "Packing Reminder",
+        "packing_reminder_body": "Don't forget to pack for your trip: {{trip_name}}",
+        "channel_packing_reminders": "Packing Reminders",
+        "channel_description": "Reminders to pack before your trip"
     }
 }
     

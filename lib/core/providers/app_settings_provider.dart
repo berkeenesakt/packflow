@@ -22,7 +22,7 @@ class AppSettingsProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
 
   // Language settings
-  Locale _locale = const Locale('en');
+  Locale _locale = Locales.en.locale;
 
   final Box<dynamic> _box;
 

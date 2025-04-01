@@ -11,6 +11,10 @@ abstract class  LocaleKeys {
   static const onboarding_get_reminded_to_check_your_list_before_departure = 'onboarding.get_reminded_to_check_your_list_before_departure';
   static const onboarding_login = 'onboarding.login';
   static const onboarding_continue_without_login = 'onboarding.continue_without_login';
+  static const onboarding_enable_notifications = 'onboarding.enable_notifications';
+  static const onboarding_requesting_permissions = 'onboarding.requesting_permissions';
+  static const onboarding_skip = 'onboarding.skip';
+  static const onboarding_notification_permission_failed = 'onboarding.notification_permission_failed';
   static const onboarding = 'onboarding';
   static const navigation_titles_home = 'navigation_titles.home';
   static const navigation_titles_packs = 'navigation_titles.packs';
@@ -112,5 +116,10 @@ abstract class  LocaleKeys {
   static const general_save = 'general.save';
   static const general_delete = 'general.delete';
   static const general = 'general';
+  static const notifications_packing_reminder_title = 'notifications.packing_reminder_title';
+  static const notifications_packing_reminder_body = 'notifications.packing_reminder_body';
+  static const notifications_channel_packing_reminders = 'notifications.channel_packing_reminders';
+  static const notifications_channel_description = 'notifications.channel_description';
+  static const notifications = 'notifications';
 
 }

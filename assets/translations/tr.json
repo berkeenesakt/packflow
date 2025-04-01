@@ -7,7 +7,11 @@
         "smart_reminders": "Akıllı Hatırlatıcılar",
         "get_reminded_to_check_your_list_before_departure": "Kalkıştan önce listenizi kontrol etmeniz için hatırlatılın",
         "login": "Giriş Yap",
-        "continue_without_login": "Giriş yapmadan devam et"
+        "continue_without_login": "Giriş yapmadan devam et",
+        "enable_notifications": "Bildirimleri Etkinleştir",
+        "requesting_permissions": "İzinler isteniyor...",
+        "skip": "Atla",
+        "notification_permission_failed": "Bildirim izni isteği başarısız oldu"
     },
     "navigation_titles": {
         "home": "Ana Sayfa",
@@ -118,5 +122,11 @@
         "cancel": "İptal",
         "save": "Kaydet",
         "delete": "Sil"
+    },
+    "notifications": {
+        "packing_reminder_title": "Paketleme Hatırlatıcısı",
+        "packing_reminder_body": "Seyahatiniz için paketlemeyi unutmayın: {{trip_name}}",
+        "channel_packing_reminders": "Paketleme Hatırlatıcıları",
+        "channel_description": "Seyahatinizden önce paketleme hatırlatmaları"
     }
 }

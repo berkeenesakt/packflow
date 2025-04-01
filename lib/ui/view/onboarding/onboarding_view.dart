@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:packpal/core/router/app_router.dart';
+import 'package:packpal/core/services/notification_service.dart';
 import 'package:packpal/generated/locale_keys.g.dart';
 
 @RoutePage()
@@ -16,6 +17,8 @@ class OnboardingView extends StatefulWidget {
 class _OnboardingViewState extends State<OnboardingView> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  final NotificationService _notificationService = NotificationService();
+  bool _requestingPermission = false;
 
   final List<OnboardingPage> _pages = [
     OnboardingPage(
@@ -47,14 +50,47 @@ class _OnboardingViewState extends State<OnboardingView> {
     });
   }
 
-  void _continueWithoutLogin() {
-    Hive.box<bool>('app').put('isFirstLaunch', false);
-    context.router.replace(const HomeRoute());
+  Future<void> _requestNotificationPermission() async {
+    setState(() {
+      _requestingPermission = true;
+    });
+
+    try {
+      await _notificationService.initialize();
+
+      // Request permissions
+      //await _notificationService.requestPermissions();
+
+      // Schedule notifications for any existing packing lists
+      await _notificationService.scheduleAllPackingReminders();
+
+      // Mark onboarding as completed and navigate to home
+      await Hive.box<bool>('app').put('isFirstLaunch', false);
+      if (mounted) {
+        await context.router.replace(const NavigationRoute());
+      }
+    } catch (e) {
+      // Handle permission errors if any
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(LocaleKeys.onboarding_notification_permission_failed.tr()),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _requestingPermission = false;
+        });
+      }
+    }
   }
 
-  void _navigateToLogin() {
-    // TODO(berke): Navigate to login screen once it's created.
-    // context.router.push(const LoginRoute());
+  void _skipNotifications() {
+    Hive.box<bool>('app').put('isFirstLaunch', false);
+    context.router.replace(const NavigationRoute());
   }
 
   @override
@@ -98,13 +134,29 @@ class _OnboardingViewState extends State<OnboardingView> {
                   const SizedBox(height: 32),
                   if (_currentPage == _pages.length - 1) ...[
                     FilledButton(
-                      onPressed: _navigateToLogin,
-                      child: Text(LocaleKeys.onboarding_login.tr()),
+                      onPressed: _requestingPermission ? null : _requestNotificationPermission,
+                      child: _requestingPermission
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(LocaleKeys.onboarding_requesting_permissions.tr()),
+                              ],
+                            )
+                          : Text(LocaleKeys.onboarding_enable_notifications.tr()),
                     ),
                     const SizedBox(height: 12),
                     TextButton(
-                      onPressed: _continueWithoutLogin,
-                      child: Text(LocaleKeys.onboarding_continue_without_login.tr()),
+                      onPressed: _skipNotifications,
+                      child: Text(LocaleKeys.onboarding_skip.tr()),
                     ),
                   ],
                 ],
