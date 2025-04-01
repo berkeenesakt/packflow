@@ -139,38 +139,32 @@ class _SettingsViewState extends State<SettingsView> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
+            RadioListTile<ThemeMode>(
               title: Text(LocaleKeys.settings_theme_system.tr()),
-              leading: Radio<ThemeMode>(
-                value: ThemeMode.system,
-                groupValue: appSettings.themeMode,
-                onChanged: (value) {
-                  appSettings.setThemeMode(ThemeMode.system);
-                  Navigator.pop(context);
-                },
-              ),
+              value: ThemeMode.system,
+              groupValue: appSettings.themeMode,
+              onChanged: (value) {
+                appSettings.setThemeMode(ThemeMode.system);
+                Navigator.pop(context);
+              },
             ),
-            ListTile(
+            RadioListTile<ThemeMode>(
               title: Text(LocaleKeys.settings_theme_light.tr()),
-              leading: Radio<ThemeMode>(
-                value: ThemeMode.light,
-                groupValue: appSettings.themeMode,
-                onChanged: (value) {
-                  appSettings.setThemeMode(ThemeMode.light);
-                  Navigator.pop(context);
-                },
-              ),
+              value: ThemeMode.light,
+              groupValue: appSettings.themeMode,
+              onChanged: (value) {
+                appSettings.setThemeMode(ThemeMode.light);
+                Navigator.pop(context);
+              },
             ),
-            ListTile(
+            RadioListTile<ThemeMode>(
               title: Text(LocaleKeys.settings_theme_dark.tr()),
-              leading: Radio<ThemeMode>(
-                value: ThemeMode.dark,
-                groupValue: appSettings.themeMode,
-                onChanged: (value) {
-                  appSettings.setThemeMode(ThemeMode.dark);
-                  Navigator.pop(context);
-                },
-              ),
+              value: ThemeMode.dark,
+              groupValue: appSettings.themeMode,
+              onChanged: (value) {
+                appSettings.setThemeMode(ThemeMode.dark);
+                Navigator.pop(context);
+              },
             ),
           ],
         ),
@@ -192,27 +186,23 @@ class _SettingsViewState extends State<SettingsView> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
+            RadioListTile<String>(
               title: const Text('English'),
-              leading: Radio<String>(
-                value: 'en',
-                groupValue: context.locale.languageCode,
-                onChanged: (value) {
-                  appSettings.setLocale(context, Locales.en.locale);
-                  Navigator.pop(context);
-                },
-              ),
+              value: 'en',
+              groupValue: context.locale.languageCode,
+              onChanged: (value) {
+                appSettings.setLocale(context, Locales.en.locale);
+                Navigator.pop(context);
+              },
             ),
-            ListTile(
+            RadioListTile<String>(
               title: const Text('Türkçe'),
-              leading: Radio<String>(
-                value: 'tr',
-                groupValue: context.locale.languageCode,
-                onChanged: (value) {
-                  appSettings.setLocale(context, Locales.tr.locale);
-                  Navigator.pop(context);
-                },
-              ),
+              value: 'tr',
+              groupValue: context.locale.languageCode,
+              onChanged: (value) {
+                appSettings.setLocale(context, Locales.tr.locale);
+                Navigator.pop(context);
+              },
             ),
           ],
         ),
@@ -272,6 +262,7 @@ class _SettingsViewState extends State<SettingsView> {
         onChanged: onChanged,
         activeColor: Theme.of(context).colorScheme.primary,
       ),
+      onTap: () => onChanged(!value),
     );
   }
 }
