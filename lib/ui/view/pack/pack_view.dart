@@ -234,6 +234,9 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
                 .getPackingList(widget.packingList.id)
                 .then((value) => value?.items.where((item) => item.categoryId == selectedCategory?.id).toList() ?? []),
         builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
           return Column(
             children: [
               Container(
