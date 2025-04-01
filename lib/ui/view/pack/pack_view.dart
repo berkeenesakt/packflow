@@ -238,7 +238,7 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
             children: [
               Container(
                 width: double.infinity,
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                color: Theme.of(context).colorScheme.surface,
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
