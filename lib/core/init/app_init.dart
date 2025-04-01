@@ -29,6 +29,8 @@ class AppInit {
     await Hive.openBox<PackingCategory>('categories');
     await Hive.openBox<PackingItem>('packing_items');
     await _initializeDefaultCategories();
+
+    // Initialize Firebase
     await Firebase.initializeApp();
   }
 
