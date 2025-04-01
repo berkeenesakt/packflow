@@ -81,7 +81,7 @@ class _AddItemState extends State<AddItem> {
       controller: widget.scrollController,
       child: Padding(
         padding: EdgeInsets.only(
-          top: 16,
+          top: widget.onToggleItem != null ? 16 : 0,
           bottom: MediaQuery.of(context).viewInsets.bottom + 16,
         ),
         child: Column(
