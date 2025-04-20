@@ -43,6 +43,7 @@ class _NavigationViewState extends State<NavigationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: pagesList[currentPage],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(

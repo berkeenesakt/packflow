@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:packpal/core/repositories/packing_list_repository.dart';
 import 'package:packpal/core/router/app_router.dart';
 import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packpal/ui/widgets/empty_state_widget.dart';
 import 'package:packpal/ui/widgets/home/packing_list_card.dart';
 
 @RoutePage()
@@ -60,59 +61,13 @@ class _PackingListsViewState extends State<PackingListsView> {
           }
 
           if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                LocaleKeys.packing_list_error_loading.tr(),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-              ),
-            );
+            return const Center(child: EmptyStateWidget());
           }
 
           final packingLists = snapshot.data ?? [];
 
           if (packingLists.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.luggage_rounded,
-                    size: 80,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    LocaleKeys.packing_list_no_lists_yet.tr(),
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    LocaleKeys.packing_list_create_first_list.tr(),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: 32),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      context.router.push(
-                        CreatePackingListRoute(repository: widget.repository),
-                      );
-                    },
-                    icon: const Icon(Icons.add),
-                    label: Text(LocaleKeys.add_sheet_create_packing_list.tr()),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
+            return const Center(child: EmptyStateWidget());
           }
 
           return ListView.builder(
