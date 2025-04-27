@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:packpal/core/repositories/packing_list_repository.dart';
-import 'package:packpal/core/router/app_router.dart';
 import 'package:packpal/generated/locale_keys.g.dart';
 import 'package:packpal/ui/widgets/empty_state_widget.dart';
 import 'package:packpal/ui/widgets/home/packing_list_card.dart';
@@ -30,9 +29,11 @@ class _PackingListsViewState extends State<PackingListsView> {
     super.initState();
     _loadPackingLists();
     Hive.box<PackingList>('packing_lists').listenable().addListener(() {
-      setState(() {
-        _packingListsFuture = widget.repository.getAllPackingLists();
-      });
+      if (mounted) {
+        setState(() {
+          _packingListsFuture = widget.repository.getAllPackingLists();
+        });
+      }
     });
   }
 

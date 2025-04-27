@@ -53,11 +53,6 @@ class SectionHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (onViewAll != null && false)
-            TextButton(
-              onPressed: onViewAll,
-              child: Text('home.view_all'.tr()),
-            ),
         ],
       ),
     );

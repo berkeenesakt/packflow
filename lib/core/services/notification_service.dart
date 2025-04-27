@@ -62,43 +62,53 @@ class NotificationService {
       return; // No departure date set, can't schedule reminder
     }
 
-    // Calculate reminder time - 1 day before departure
-    final reminderDate = tz.TZDateTime.from(
-      packingList.departureDate!.subtract(const Duration(days: 1)),
-      tz.local,
-    );
+    try {
+      // Ensure timezone is initialized
+      if (tz.local == null) {
+        tz.initializeTimeZones();
+      }
 
-    // Check if reminder date is in the future
-    final now = tz.TZDateTime.now(tz.local);
-    if (reminderDate.isBefore(now)) {
-      return; // Don't schedule past reminders
+      // Calculate reminder time - 1 day before departure
+      final reminderDate = tz.TZDateTime.from(
+        packingList.departureDate!.subtract(const Duration(days: 1)),
+        tz.local,
+      );
+
+      // Check if reminder date is in the future
+      final now = tz.TZDateTime.now(tz.local);
+      if (reminderDate.isBefore(now)) {
+        return; // Don't schedule past reminders
+      }
+
+      await _notificationsPlugin.zonedSchedule(
+        packingList.id.hashCode, // Use hash of ID as unique notification ID
+        LocaleKeys.notifications_packing_reminder_title.tr(),
+        LocaleKeys.notifications_packing_reminder_body.tr(
+          namedArgs: {'trip_name': packingList.name},
+        ),
+        reminderDate,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'packing_reminders',
+            LocaleKeys.notifications_channel_packing_reminders.tr(),
+            channelDescription: LocaleKeys.notifications_channel_description.tr(),
+            importance: Importance.high,
+            priority: Priority.high,
+          ),
+          iOS: const DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: 'packing_list:${packingList.id}',
+      );
+    } catch (e) {
+      // Handle timezone initialization errors
+      print('Error scheduling notification: $e');
     }
-
-    await _notificationsPlugin.zonedSchedule(
-      packingList.id.hashCode, // Use hash of ID as unique notification ID
-      LocaleKeys.notifications_packing_reminder_title.tr(),
-      LocaleKeys.notifications_packing_reminder_body.tr(
-        namedArgs: {'trip_name': packingList.name},
-      ),
-      reminderDate,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'packing_reminders',
-          LocaleKeys.notifications_channel_packing_reminders.tr(),
-          channelDescription: LocaleKeys.notifications_channel_description.tr(),
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-        iOS: const DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        ),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
-      payload: 'packing_list:${packingList.id}',
-    );
   }
 
   Future<void> cancelPackingReminder(PackingList packingList) async {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive/hive.dart';
 import 'package:packpal/core/repositories/hive_categories_repository.dart';
+import 'package:packpal/core/services/notification_service.dart';
 import 'package:packpal/core/utils/predefined_categories.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -32,6 +33,9 @@ class AppInit {
 
     // Initialize Firebase
     await Firebase.initializeApp();
+
+    // Initialize notification service
+    await NotificationService().initialize();
   }
 
   static Future<void> _initializeDefaultCategories() async {
