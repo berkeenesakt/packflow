@@ -117,26 +117,6 @@ class _HomeViewState extends State<HomeView> {
                     _buildEmptyState(context),
                   ],
 
-                  const SizedBox(height: 16),
-
-                  // Upcoming Trips section
-                  if (provider.upcomingTrips.isNotEmpty) ...[
-                    const SectionHeader(
-                      title: LocaleKeys.home_upcoming_trips,
-                      icon: Icons.flight_takeoff_outlined,
-                      iconColor: Colors.deepPurple,
-                    ),
-                    ...provider.upcomingTrips.map(
-                      (list) => Column(
-                        children: [
-                          PackingListCard(packingList: list),
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-
                   // Fully Packed section
                   if (provider.fullyPackedLists.isNotEmpty) ...[
                     const SectionHeader(

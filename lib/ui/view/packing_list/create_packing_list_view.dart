@@ -61,14 +61,9 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
   }
 
   Future<void> _selectDateRange() async {
-    final dateRange = await custom_picker.DateRangePickerDialog.show(
-      context,
-      initialStartDate: _provider.startDate,
-      initialEndDate: _provider.endDate,
-    );
-    if (dateRange != null && mounted) {
-      _provider.setDateRange(dateRange.start, dateRange.end);
-    }
+    final date = await showDatePicker(context: context, firstDate: DateTime.now(), lastDate: DateTime(2100));
+    if (date == null) return;
+    _provider.setReturnDate(date);
   }
 
   Future<void> _save() async {
@@ -144,14 +139,14 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
                           contentPadding: EdgeInsets.zero,
                           title: Text(LocaleKeys.packing_list_travel_dates.tr()),
                           subtitle: Text(
-                            provider.startDate != null && provider.endDate != null
-                                ? '${DateFormat('dd/MM/yyyy').format(provider.startDate!)} - ${DateFormat('dd/MM/yyyy').format(provider.endDate!)}'
+                            provider.returnDate != null
+                                ? DateFormat.yMMMd().format(provider.returnDate!)
                                 : LocaleKeys.packing_list_dates_not_set.tr(),
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (provider.startDate != null)
+                              if (provider.returnDate != null)
                                 IconButton(
                                   icon: const Icon(Icons.clear),
                                   onPressed: provider.clearDateRange,
@@ -172,7 +167,7 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
                   AddItem(
                     categories: provider.categories,
                     items: provider.items,
-                    onAddItem: provider.addItem,
+                    onAddItem: (String itemName) => provider.addItem(itemName, context),
                     onSelectCategory: provider.setSelectedCategory,
                     onToggleItem: provider.toggleItem,
                     onDeleteItem: provider.deleteItem,

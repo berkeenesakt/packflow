@@ -58,19 +58,10 @@ class NotificationService {
   }
 
   Future<void> schedulePackingReminder(PackingList packingList) async {
-    if (packingList.departureDate == null) {
-      return; // No departure date set, can't schedule reminder
-    }
-
     try {
-      // Ensure timezone is initialized
-      if (tz.local == null) {
-        tz.initializeTimeZones();
-      }
-
       // Calculate reminder time - 1 day before departure
       final reminderDate = tz.TZDateTime.from(
-        packingList.departureDate!.subtract(const Duration(days: 1)),
+        packingList.returnDate!.subtract(const Duration(days: 1)),
         tz.local,
       );
 
@@ -124,7 +115,7 @@ class NotificationService {
   Future<void> scheduleAllPackingReminders() async {
     final packingLists = Hive.box<PackingList>('packing_lists').values.toList();
     for (final packingList in packingLists) {
-      if (packingList.departureDate != null) {
+      if (packingList.returnDate != null) {
         await schedulePackingReminder(packingList);
       }
     }

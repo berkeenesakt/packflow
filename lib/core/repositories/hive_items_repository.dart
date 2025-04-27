@@ -1,5 +1,6 @@
 import 'package:gen/gen.dart';
 import 'package:hive/hive.dart';
+import 'package:packpal/core/exceptions/item_exceptions.dart';
 import 'package:packpal/core/repositories/items_repository.dart';
 import 'package:uuid/uuid.dart';
 
@@ -37,6 +38,11 @@ class HiveItemsRepository implements ItemsRepository {
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
+    final itemExists =
+        Hive.box<PackingItem>('packing_items').values.any((i) => i.name == itemName && i.categoryId == categoryId);
+    if (itemExists) {
+      throw ItemExistsException();
+    }
     await Hive.box<PackingItem>('packing_items').put(item.id, item);
     return item;
   }
