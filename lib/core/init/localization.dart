@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:packpal/core/enums/locales.dart';
+import 'package:packflow/core/enums/locales.dart';
 
 @immutable
 

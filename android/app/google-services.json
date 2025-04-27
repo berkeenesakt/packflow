@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "1030158446836",
-    "project_id": "packpal-1",
-    "storage_bucket": "packpal-1.firebasestorage.app"
+    "project_id": "PackFlow-1",
+    "storage_bucket": "PackFlow-1.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:1030158446836:android:3b915fae47bfd6952c6ea1",
         "android_client_info": {
-          "package_name": "com.aktumen.packpal"
+          "package_name": "com.aktumen.PackFlow"
         }
       },
       "oauth_client": [],

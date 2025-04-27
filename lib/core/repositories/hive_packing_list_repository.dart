@@ -1,7 +1,7 @@
 import 'package:gen/gen.dart';
 import 'package:hive/hive.dart';
-import 'package:packpal/core/repositories/packing_list_repository.dart';
-import 'package:packpal/core/services/notification_service.dart';
+import 'package:packflow/core/repositories/packing_list_repository.dart';
+import 'package:packflow/core/services/notification_service.dart';
 
 class HivePackingListRepository implements PackingListRepository {
   HivePackingListRepository({

@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
-import 'package:packpal/ui/widgets/app_text_form_field.dart';
-import 'package:packpal/ui/widgets/items/item_card.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
+import 'package:packflow/ui/widgets/app_text_form_field.dart';
+import 'package:packflow/ui/widgets/items/item_card.dart';
 
 class AddItem extends StatefulWidget {
   const AddItem({

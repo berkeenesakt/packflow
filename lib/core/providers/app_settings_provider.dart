@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:packpal/core/enums/locales.dart';
-import 'package:packpal/core/theme/app_theme.dart';
+import 'package:packflow/core/enums/locales.dart';
+import 'package:packflow/core/theme/app_theme.dart';
 
 class AppSettingsProvider extends ChangeNotifier {
   AppSettingsProvider({Box<dynamic>? box}) : _box = box ?? Hive.box(_boxName) {

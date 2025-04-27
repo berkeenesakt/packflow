@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
-import 'package:packpal/core/repositories/packing_list_repository.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packflow/core/repositories/packing_list_repository.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
 
 class HomeProvider extends ChangeNotifier {
   HomeProvider({

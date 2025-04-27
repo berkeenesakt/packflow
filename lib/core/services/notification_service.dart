@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gen/gen.dart';
 import 'package:hive/hive.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 

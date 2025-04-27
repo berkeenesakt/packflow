@@ -1,5 +1,5 @@
-import 'package:packpal/ui/widgets/date_range_picker/data.dart';
-import 'package:packpal/ui/widgets/date_range_picker/date_range_picker_model.dart';
+import 'package:packflow/ui/widgets/date_range_picker/data.dart';
+import 'package:packflow/ui/widgets/date_range_picker/date_range_picker_model.dart';
 
 class DateMethods {
   static final List<DateRangeModel> bookedDates = CalendarData.bookedDates;

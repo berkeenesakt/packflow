@@ -3,10 +3,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:packpal/core/repositories/packing_list_repository.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
-import 'package:packpal/ui/widgets/empty_state_widget.dart';
-import 'package:packpal/ui/widgets/home/packing_list_card.dart';
+import 'package:packflow/core/repositories/packing_list_repository.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
+import 'package:packflow/ui/widgets/empty_state_widget.dart';
+import 'package:packflow/ui/widgets/home/packing_list_card.dart';
 
 @RoutePage()
 class PackingListsView extends StatefulWidget {

@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
-import 'package:packpal/core/exceptions/item_exceptions.dart';
-import 'package:packpal/core/repositories/categories_repository.dart';
-import 'package:packpal/core/repositories/items_repository.dart';
-import 'package:packpal/core/repositories/packing_list_repository.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packflow/core/exceptions/item_exceptions.dart';
+import 'package:packflow/core/repositories/categories_repository.dart';
+import 'package:packflow/core/repositories/items_repository.dart';
+import 'package:packflow/core/repositories/packing_list_repository.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
 import 'package:uuid/uuid.dart';
 
 class CreatePackingListProvider extends ChangeNotifier {

@@ -1,10 +1,10 @@
-# PackPal Notification System
+# PackFlow Notification System
 
-This document describes the notification system implemented in PackPal.
+This document describes the notification system implemented in PackFlow.
 
 ## Overview
 
-PackPal uses Flutter Local Notifications plugin to schedule reminders for users to pack their items before their travel date. The notification system is designed to:
+PackFlow uses Flutter Local Notifications plugin to schedule reminders for users to pack their items before their travel date. The notification system is designed to:
 
 1. Send reminders 1 day before the departure date
 2. Allow users to toggle notifications on/off in settings

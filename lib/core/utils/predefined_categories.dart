@@ -1,5 +1,5 @@
 import 'package:gen/gen.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
 
 /// Utility class for managing predefined categories
 class PredefinedCategories {

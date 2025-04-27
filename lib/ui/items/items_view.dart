@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:packpal/core/providers/items_provider.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
-import 'package:packpal/ui/widgets/add_item.dart';
+import 'package:packflow/core/providers/items_provider.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
+import 'package:packflow/ui/widgets/add_item.dart';
 import 'package:provider/provider.dart';
 
 class ItemsView extends StatelessWidget {
