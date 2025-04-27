@@ -29,6 +29,7 @@
         "create_title": "Paketleme Listesi Oluştur",
         "add_item_title": "Eşya Ekle",
         "edit_title": "Paketleme Listesini Düzenle",
+        "item_exists": "Bu eşya zaten mevcut",
         "name_label": "İsim",
         "name_hint": "Paketleme listeniz için bir isim girin",
         "name_validation": "Lütfen bir isim girin",

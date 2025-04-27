@@ -29,6 +29,7 @@
         "create_title": "Create Packing List",
         "add_item_title": "Add Item",
         "edit_title": "Edit Packing List",
+        "item_exists": "This item already exists",
         "name_label": "Name",
         "name_hint": "Enter a name for your packing list",
         "name_validation": "Please enter a name",

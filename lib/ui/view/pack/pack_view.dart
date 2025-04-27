@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:packpal/core/exceptions/item_exceptions.dart';
 import 'package:packpal/core/repositories/hive_categories_repository.dart';
 import 'package:packpal/core/repositories/hive_items_repository.dart';
 import 'package:packpal/core/repositories/hive_packing_list_repository.dart';
@@ -108,7 +109,18 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
   }
 
   Future<void> _addItem(String name, String categoryId) async {
-    final item = await itemsRepository.addItem(name, categoryId);
+    late final PackingItem item;
+    try {
+      item = await itemsRepository.addItem(name, categoryId);
+    } on ItemExistsException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(LocaleKeys.packing_list_item_exists.tr()),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
     if (mounted) {
       await packRepository.addItem(widget.packingList.id, item);
       setState(() {

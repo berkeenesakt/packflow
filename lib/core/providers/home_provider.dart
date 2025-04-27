@@ -11,7 +11,6 @@ class HomeProvider extends ChangeNotifier {
   }) {
     loadRecentLists();
     loadInProgressLists();
-    loadUpcomingTrips();
     loadFullyPackedLists();
   }
 
@@ -20,13 +19,11 @@ class HomeProvider extends ChangeNotifier {
   bool isLoading = true;
   List<PackingList> _recentLists = [];
   List<PackingList> _inProgressLists = [];
-  List<PackingList> _upcomingTrips = [];
   List<PackingList> _fullyPackedLists = [];
   String _travelTip = '';
 
   List<PackingList> get recentLists => _recentLists;
   List<PackingList> get inProgressLists => _inProgressLists;
-  List<PackingList> get upcomingTrips => _upcomingTrips;
   List<PackingList> get fullyPackedLists => _fullyPackedLists;
   String get travelTip => _travelTip;
 
@@ -69,21 +66,6 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadUpcomingTrips() async {
-    final allLists = await packingListRepository.getAllPackingLists();
-    final now = DateTime.now();
-
-    // Lists with a future departure date
-    _upcomingTrips = allLists.where((list) => list.departureDate != null && list.departureDate!.isAfter(now)).toList()
-      ..sort((a, b) => a.departureDate!.compareTo(b.departureDate!));
-
-    // Take the 3 closest upcoming trips
-    _upcomingTrips = _upcomingTrips.take(3).toList();
-
-    _generateRandomTravelTip();
-    notifyListeners();
-  }
-
   void _generateRandomTravelTip() {
     final tips = [
       LocaleKeys.home_passport_reminder,
@@ -98,7 +80,6 @@ class HomeProvider extends ChangeNotifier {
   void refresh() {
     loadRecentLists();
     loadInProgressLists();
-    loadUpcomingTrips();
     loadFullyPackedLists();
   }
 }

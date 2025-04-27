@@ -29,6 +29,7 @@ abstract class  LocaleKeys {
   static const packing_list_create_title = 'packing_list.create_title';
   static const packing_list_add_item_title = 'packing_list.add_item_title';
   static const packing_list_edit_title = 'packing_list.edit_title';
+  static const packing_list_item_exists = 'packing_list.item_exists';
   static const packing_list_name_label = 'packing_list.name_label';
   static const packing_list_name_hint = 'packing_list.name_hint';
   static const packing_list_name_validation = 'packing_list.name_validation';

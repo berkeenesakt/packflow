@@ -68,7 +68,7 @@ class PackingListCard extends StatelessWidget {
                             ),
                       ),
                     ),
-                    if (packingList.departureDate != null)
+                    if (packingList.returnDate != null)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
@@ -85,7 +85,7 @@ class PackingListCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              _formatDate(packingList.departureDate!),
+                              _formatDate(packingList.returnDate!),
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context).colorScheme.primary,
                                     fontWeight: FontWeight.w500,

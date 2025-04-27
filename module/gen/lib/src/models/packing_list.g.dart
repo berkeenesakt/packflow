@@ -21,18 +21,17 @@ class PackingListAdapter extends TypeAdapter<PackingList> {
       name: fields[1] as String,
       createdAt: fields[3] as DateTime,
       description: fields[2] as String?,
-      departureDate: fields[4] as DateTime?,
-      returnDate: fields[5] as DateTime?,
-      items: (fields[6] as List?)?.cast<PackingItem>(),
-      checkedItems: (fields[7] as List?)?.cast<PackingItem>(),
-      updatedAt: fields[8] as DateTime?,
+      returnDate: fields[4] as DateTime?,
+      items: (fields[5] as List?)?.cast<PackingItem>(),
+      checkedItems: (fields[6] as List?)?.cast<PackingItem>(),
+      updatedAt: fields[7] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PackingList obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -42,14 +41,12 @@ class PackingListAdapter extends TypeAdapter<PackingList> {
       ..writeByte(3)
       ..write(obj.createdAt)
       ..writeByte(4)
-      ..write(obj.departureDate)
-      ..writeByte(5)
       ..write(obj.returnDate)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.items)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.checkedItems)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.updatedAt);
   }
 
@@ -73,9 +70,6 @@ PackingList _$PackingListFromJson(Map<String, dynamic> json) => PackingList(
       name: json['name'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       description: json['description'] as String?,
-      departureDate: json['departureDate'] == null
-          ? null
-          : DateTime.parse(json['departureDate'] as String),
       returnDate: json['returnDate'] == null
           ? null
           : DateTime.parse(json['returnDate'] as String),
@@ -96,7 +90,6 @@ Map<String, dynamic> _$PackingListToJson(PackingList instance) =>
       'name': instance.name,
       'description': instance.description,
       'createdAt': instance.createdAt.toIso8601String(),
-      'departureDate': instance.departureDate?.toIso8601String(),
       'returnDate': instance.returnDate?.toIso8601String(),
       'items': instance.items,
       'checkedItems': instance.checkedItems,

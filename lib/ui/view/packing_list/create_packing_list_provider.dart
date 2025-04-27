@@ -1,8 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
+import 'package:packpal/core/exceptions/item_exceptions.dart';
 import 'package:packpal/core/repositories/categories_repository.dart';
 import 'package:packpal/core/repositories/items_repository.dart';
 import 'package:packpal/core/repositories/packing_list_repository.dart';
+import 'package:packpal/generated/locale_keys.g.dart';
 import 'package:uuid/uuid.dart';
 
 class CreatePackingListProvider extends ChangeNotifier {
@@ -15,8 +18,7 @@ class CreatePackingListProvider extends ChangeNotifier {
     if (isEditing) {
       nameController.text = packingList!.name;
       descriptionController.text = packingList!.description ?? '';
-      _startDate = packingList!.departureDate;
-      _endDate = packingList!.returnDate;
+      _returnDate = packingList!.returnDate;
       _selectedItems = [...packingList!.items];
     }
     loadCategories().then((_) => loadItems());
@@ -31,16 +33,14 @@ class CreatePackingListProvider extends ChangeNotifier {
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
-  DateTime? _startDate;
-  DateTime? _endDate;
+  DateTime? _returnDate;
   List<PackingItem> _items = [];
   List<PackingCategory> _categories = [];
   List<PackingItem> _selectedItems = [];
   PackingCategory? _selectedCategory;
 
   bool get isEditing => packingList != null;
-  DateTime? get startDate => _startDate;
-  DateTime? get endDate => _endDate;
+  DateTime? get returnDate => _returnDate;
   List<PackingItem> get items => _items;
   List<PackingCategory> get categories => _categories;
   List<PackingItem> get selectedItems => _selectedItems;
@@ -72,8 +72,19 @@ class CreatePackingListProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addItem(String itemName) async {
-    final newItem = await itemsRepository.addItem(itemName, _selectedCategory!.id);
+  Future<void> addItem(String itemName, BuildContext context) async {
+    late final PackingItem newItem;
+    try {
+      newItem = await itemsRepository.addItem(itemName, _selectedCategory!.id);
+    } on ItemExistsException catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(LocaleKeys.packing_list_item_exists.tr()),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
     _selectedItems.add(newItem);
     notifyListeners();
   }
@@ -105,15 +116,13 @@ class CreatePackingListProvider extends ChangeNotifier {
     return _items;
   }
 
-  void setDateRange(DateTime? start, DateTime? end) {
-    _startDate = start;
-    _endDate = end;
+  void setReturnDate(DateTime? date) {
+    _returnDate = date;
     notifyListeners();
   }
 
   void clearDateRange() {
-    _startDate = null;
-    _endDate = null;
+    _returnDate = null;
     notifyListeners();
   }
 
@@ -126,14 +135,18 @@ class CreatePackingListProvider extends ChangeNotifier {
         name: nameController.text,
         description: descriptionController.text.isEmpty ? null : descriptionController.text,
         createdAt: isEditing ? packingList!.createdAt : DateTime.now(),
-        departureDate: _startDate,
-        returnDate: _endDate,
+        returnDate: _returnDate,
         items: _selectedItems,
       );
 
       if (isEditing) {
         await repository.updatePackingList(packingListData);
       } else {
+        final packs = await repository.getAllPackingLists();
+        final isSameName = packs.any((list) => list.name == packingListData.name);
+        if (isSameName) {
+          throw Exception('Packing list with the same name already exists.');
+        }
         await repository.createPackingList(packingListData);
       }
 

@@ -13,7 +13,6 @@ class PackingList extends Equatable {
     required this.name,
     required this.createdAt,
     this.description,
-    this.departureDate,
     this.returnDate,
     List<PackingItem>? items,
     List<PackingItem>? checkedItems,
@@ -31,14 +30,12 @@ class PackingList extends Equatable {
   @HiveField(3)
   final DateTime createdAt;
   @HiveField(4)
-  final DateTime? departureDate;
-  @HiveField(5)
   final DateTime? returnDate;
-  @HiveField(6)
+  @HiveField(5)
   final List<PackingItem> items;
-  @HiveField(7)
+  @HiveField(6)
   final List<PackingItem> checkedItems;
-  @HiveField(8)
+  @HiveField(7)
   final DateTime updatedAt;
   int get totalItems => items.length;
 
@@ -54,7 +51,6 @@ class PackingList extends Equatable {
     String? name,
     String? description,
     DateTime? createdAt,
-    DateTime? departureDate,
     DateTime? returnDate,
     List<PackingItem>? items,
     List<PackingItem>? checkedItems,
@@ -65,7 +61,6 @@ class PackingList extends Equatable {
       name: name ?? this.name,
       description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
-      departureDate: departureDate ?? this.departureDate,
       returnDate: returnDate ?? this.returnDate,
       items: items ?? this.items,
       checkedItems: checkedItems ?? this.checkedItems,
@@ -74,5 +69,5 @@ class PackingList extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, name, description, createdAt, departureDate, returnDate, items];
+  List<Object?> get props => [id, name, description, createdAt, returnDate, items];
 }
