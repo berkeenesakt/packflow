@@ -7,7 +7,7 @@ import 'package:packflow/core/repositories/hive_items_repository.dart';
 import 'package:packflow/core/repositories/hive_packing_list_repository.dart';
 import 'package:packflow/core/router/app_router.dart';
 import 'package:packflow/generated/locale_keys.g.dart';
-import 'package:packflow/ui/items/items_view.dart';
+import 'package:packflow/ui/view/items/items_view.dart';
 import 'package:packflow/ui/view/home_view.dart';
 import 'package:packflow/ui/view/packing_list/packing_lists_view.dart';
 import 'package:packflow/ui/view/settings/settings_view.dart';
@@ -44,7 +44,8 @@ class _NavigationViewState extends State<NavigationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: pagesList[currentPage],
+      extendBody: true,
+      body: GestureDetector(onTap: () => FocusScope.of(context).unfocus(), child: pagesList[currentPage]),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
         decoration: const BoxDecoration(

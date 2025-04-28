@@ -196,7 +196,6 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
                     maxChildSize: 0.95,
                     builder: (context, scrollController) {
                       return StatefulBuilder(
-                        key: UniqueKey(),
                         builder: (context, setState) {
                           return AddItem(
                             categories: dialogCategories,
