@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:packpal/core/router/app_router.dart';
+import 'package:packflow/core/router/app_router.dart';
 
 @RoutePage()
 class SplashView extends StatefulWidget {
@@ -52,7 +52,7 @@ class _SplashViewState extends State<SplashView> {
             ),
             const SizedBox(height: 24),
             Text(
-              'PackPal',
+              'PackFlow',
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,

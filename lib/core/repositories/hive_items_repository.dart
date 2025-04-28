@@ -1,7 +1,7 @@
 import 'package:gen/gen.dart';
 import 'package:hive/hive.dart';
-import 'package:packpal/core/exceptions/item_exceptions.dart';
-import 'package:packpal/core/repositories/items_repository.dart';
+import 'package:packflow/core/exceptions/item_exceptions.dart';
+import 'package:packflow/core/repositories/items_repository.dart';
 import 'package:uuid/uuid.dart';
 
 class HiveItemsRepository implements ItemsRepository {

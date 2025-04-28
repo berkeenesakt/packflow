@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
-import 'package:packpal/core/repositories/categories_repository.dart';
-import 'package:packpal/core/repositories/items_repository.dart';
+import 'package:packflow/core/repositories/categories_repository.dart';
+import 'package:packflow/core/repositories/items_repository.dart';
 
 class ItemsProvider extends ChangeNotifier {
   ItemsProvider({

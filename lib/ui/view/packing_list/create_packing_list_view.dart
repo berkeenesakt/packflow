@@ -3,17 +3,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:packpal/core/repositories/categories_repository.dart';
-import 'package:packpal/core/repositories/hive_categories_repository.dart';
-import 'package:packpal/core/repositories/hive_items_repository.dart';
-import 'package:packpal/core/repositories/items_repository.dart';
-import 'package:packpal/core/repositories/packing_list_repository.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
-import 'package:packpal/ui/view/packing_list/create_packing_list_provider.dart';
-import 'package:packpal/ui/widgets/add_item.dart';
-import 'package:packpal/ui/widgets/app_filled_button.dart';
-import 'package:packpal/ui/widgets/app_text_form_field.dart';
-import 'package:packpal/ui/widgets/date_range_picker/date_range_picker.dart' as custom_picker;
+import 'package:packflow/core/repositories/categories_repository.dart';
+import 'package:packflow/core/repositories/hive_categories_repository.dart';
+import 'package:packflow/core/repositories/hive_items_repository.dart';
+import 'package:packflow/core/repositories/items_repository.dart';
+import 'package:packflow/core/repositories/packing_list_repository.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
+import 'package:packflow/ui/view/packing_list/create_packing_list_provider.dart';
+import 'package:packflow/ui/widgets/add_item.dart';
+import 'package:packflow/ui/widgets/app_filled_button.dart';
+import 'package:packflow/ui/widgets/app_text_form_field.dart';
+import 'package:packflow/ui/widgets/date_range_picker/date_range_picker.dart' as custom_picker;
 import 'package:provider/provider.dart';
 
 @RoutePage()

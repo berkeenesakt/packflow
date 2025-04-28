@@ -1,4 +1,4 @@
-import 'package:packpal/ui/widgets/date_range_picker/date_range_picker_model.dart';
+import 'package:packflow/ui/widgets/date_range_picker/date_range_picker_model.dart';
 
 class CalendarData {
   static final DateTime maxDate = DateTime(2025, 12, 31);

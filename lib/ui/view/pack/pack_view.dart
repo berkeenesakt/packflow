@@ -5,13 +5,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:packpal/core/exceptions/item_exceptions.dart';
-import 'package:packpal/core/repositories/hive_categories_repository.dart';
-import 'package:packpal/core/repositories/hive_items_repository.dart';
-import 'package:packpal/core/repositories/hive_packing_list_repository.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
-import 'package:packpal/ui/widgets/add_item.dart';
-import 'package:packpal/ui/widgets/items/item_card.dart';
+import 'package:packflow/core/exceptions/item_exceptions.dart';
+import 'package:packflow/core/repositories/hive_categories_repository.dart';
+import 'package:packflow/core/repositories/hive_items_repository.dart';
+import 'package:packflow/core/repositories/hive_packing_list_repository.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
+import 'package:packflow/ui/widgets/add_item.dart';
+import 'package:packflow/ui/widgets/items/item_card.dart';
 
 @RoutePage()
 class PackView extends StatefulWidget {
@@ -196,7 +196,6 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
                     maxChildSize: 0.95,
                     builder: (context, scrollController) {
                       return StatefulBuilder(
-                        key: UniqueKey(),
                         builder: (context, setState) {
                           return AddItem(
                             categories: dialogCategories,

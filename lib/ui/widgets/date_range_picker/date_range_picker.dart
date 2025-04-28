@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
-import 'package:packpal/ui/widgets/date_range_picker/colors.dart';
-import 'package:packpal/ui/widgets/date_range_picker/data.dart';
-import 'package:packpal/ui/widgets/date_range_picker/date_methods.dart';
-import 'package:packpal/ui/widgets/date_range_picker/widgets/cell.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
+import 'package:packflow/ui/widgets/date_range_picker/colors.dart';
+import 'package:packflow/ui/widgets/date_range_picker/data.dart';
+import 'package:packflow/ui/widgets/date_range_picker/date_methods.dart';
+import 'package:packflow/ui/widgets/date_range_picker/widgets/cell.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 /// A dialog that allows users to select a date range.

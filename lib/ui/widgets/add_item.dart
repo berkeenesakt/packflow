@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
-import 'package:packpal/ui/widgets/app_text_form_field.dart';
-import 'package:packpal/ui/widgets/items/item_card.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
+import 'package:packflow/ui/widgets/app_text_form_field.dart';
+import 'package:packflow/ui/widgets/items/item_card.dart';
 
 class AddItem extends StatefulWidget {
   const AddItem({
@@ -59,13 +59,6 @@ class _AddItemState extends State<AddItem> {
     if (widget.hideInitiallySelectedItems) {
       widget.items.removeWhere((item) => widget.initiallySelectedItems.contains(item));
     }
-
-    // Auto focus the text field after a short delay
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) {
-        _itemNameFocusNode.requestFocus();
-      }
-    });
   }
 
   @override
@@ -79,6 +72,7 @@ class _AddItemState extends State<AddItem> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       controller: widget.scrollController,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: EdgeInsets.only(
           top: widget.onToggleItem != null ? 16 : 0,
@@ -111,6 +105,7 @@ class _AddItemState extends State<AddItem> {
             SizedBox(
               width: double.infinity,
               child: SingleChildScrollView(
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
                 child: Row(

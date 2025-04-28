@@ -1,4 +1,4 @@
-package com.aktumen.packpal
+package com.aktumen.PackFlow
 
 import io.flutter.embedding.android.FlutterActivity
 

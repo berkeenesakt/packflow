@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:packpal/core/init/app_init.dart';
-import 'package:packpal/core/init/localization.dart';
-import 'package:packpal/core/providers/app_settings_provider.dart';
-import 'package:packpal/core/router/app_router.dart';
+import 'package:packflow/core/init/app_init.dart';
+import 'package:packflow/core/init/localization.dart';
+import 'package:packflow/core/providers/app_settings_provider.dart';
+import 'package:packflow/core/router/app_router.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
     }
 
     return MaterialApp.router(
-      title: 'PackPal',
+      title: 'PackFlow',
       theme: appSettings.themeData,
       darkTheme: appSettings.themeData,
       themeMode: appSettings.themeMode,
@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: appSettings.locale,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

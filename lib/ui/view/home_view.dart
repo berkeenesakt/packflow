@@ -3,14 +3,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:packpal/core/providers/home_provider.dart';
-import 'package:packpal/core/repositories/hive_packing_list_repository.dart';
-import 'package:packpal/core/router/app_router.dart';
-import 'package:packpal/generated/locale_keys.g.dart';
-import 'package:packpal/ui/widgets/empty_state_widget.dart';
-import 'package:packpal/ui/widgets/home/info_card.dart';
-import 'package:packpal/ui/widgets/home/packing_list_card.dart';
-import 'package:packpal/ui/widgets/home/section_header.dart';
+import 'package:packflow/core/providers/home_provider.dart';
+import 'package:packflow/core/repositories/hive_packing_list_repository.dart';
+import 'package:packflow/core/router/app_router.dart';
+import 'package:packflow/generated/locale_keys.g.dart';
+import 'package:packflow/ui/widgets/empty_state_widget.dart';
+import 'package:packflow/ui/widgets/home/info_card.dart';
+import 'package:packflow/ui/widgets/home/packing_list_card.dart';
+import 'package:packflow/ui/widgets/home/section_header.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:packpal/ui/widgets/date_range_picker/colors.dart';
+import 'package:packflow/ui/widgets/date_range_picker/colors.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CalendarCell extends StatelessWidget {

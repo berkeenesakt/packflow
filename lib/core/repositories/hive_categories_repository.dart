@@ -1,6 +1,6 @@
 import 'package:gen/gen.dart';
 import 'package:hive/hive.dart';
-import 'package:packpal/core/repositories/categories_repository.dart';
+import 'package:packflow/core/repositories/categories_repository.dart';
 
 class HiveCategoriesRepository implements CategoriesRepository {
   @override

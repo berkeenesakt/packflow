@@ -3,9 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive/hive.dart';
-import 'package:packpal/core/repositories/hive_categories_repository.dart';
-import 'package:packpal/core/services/notification_service.dart';
-import 'package:packpal/core/utils/predefined_categories.dart';
+import 'package:packflow/core/repositories/hive_categories_repository.dart';
+import 'package:packflow/core/services/notification_service.dart';
+import 'package:packflow/core/utils/predefined_categories.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppInit {
