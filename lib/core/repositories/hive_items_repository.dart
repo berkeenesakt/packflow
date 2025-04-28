@@ -24,6 +24,7 @@ class HiveItemsRepository implements ItemsRepository {
         .toList();
     for (final list in packingLists) {
       list.items.removeWhere((item) => item.id == itemId);
+      list.checkedItems.removeWhere((item) => item.id == itemId);
       await Hive.box<PackingList>('packing_lists').put(list.id, list);
     }
     await Hive.box<PackingItem>('packing_items').delete(itemId);
