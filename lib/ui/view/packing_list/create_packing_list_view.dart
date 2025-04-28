@@ -13,7 +13,6 @@ import 'package:packflow/ui/view/packing_list/create_packing_list_provider.dart'
 import 'package:packflow/ui/widgets/add_item.dart';
 import 'package:packflow/ui/widgets/app_filled_button.dart';
 import 'package:packflow/ui/widgets/app_text_form_field.dart';
-import 'package:packflow/ui/widgets/date_range_picker/date_range_picker.dart' as custom_picker;
 import 'package:provider/provider.dart';
 
 @RoutePage()

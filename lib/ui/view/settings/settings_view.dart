@@ -6,6 +6,7 @@ import 'package:packflow/core/providers/app_settings_provider.dart';
 import 'package:packflow/core/services/notification_service.dart';
 import 'package:packflow/generated/locale_keys.g.dart';
 import 'package:provider/provider.dart';
+import 'package:gen/gen.dart';
 
 @RoutePage()
 class SettingsView extends StatefulWidget {
@@ -73,23 +74,21 @@ class _SettingsViewState extends State<SettingsView> {
             title: LocaleKeys.settings_version.tr(),
             subtitle: '1.0.0',
             onTap: () {
-              // Show version details
-            },
-          ),
-          _buildSettingItem(
-            context,
-            icon: Icons.privacy_tip_outlined,
-            title: LocaleKeys.settings_privacy.tr(),
-            onTap: () {
-              // Open privacy policy
-            },
-          ),
-          _buildSettingItem(
-            context,
-            icon: Icons.feedback_outlined,
-            title: LocaleKeys.settings_feedback.tr(),
-            onTap: () {
-              // Open feedback form
+              showAboutDialog(
+                context: context,
+                applicationName: 'PackFlow',
+                applicationVersion: '1.0.0',
+                applicationIcon: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    Assets.icons.appIcon.path,
+                    package: 'gen',
+                    width: 64,
+                    height: 64,
+                  ),
+                ),
+                applicationLegalese: '© 2025 Berke Enes Aktumen. All rights reserved.',
+              );
             },
           ),
         ],
