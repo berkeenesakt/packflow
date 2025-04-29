@@ -1,8 +1,7 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:packflow/core/repositories/hive_packing_list_repository.dart';
 import 'package:packflow/generated/locale_keys.g.dart';
 import 'package:packflow/ui/widgets/app_text_form_field.dart';
@@ -59,7 +58,12 @@ class _EditPackingListViewState extends State<EditPackingListView> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update packing list: $e')),
+          SnackBar(
+              content: Text('Failed to update packing list: $e'),
+              duration: const Duration(seconds: 2),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
         );
       }
     } finally {
@@ -70,7 +74,7 @@ class _EditPackingListViewState extends State<EditPackingListView> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: _returnDate ?? DateTime.now(),
       firstDate: DateTime.now(),
@@ -199,7 +203,7 @@ class _EditPackingListViewState extends State<EditPackingListView> {
                           const SizedBox(height: 8),
                           LinearProgressIndicator(
                             value: widget.packingList.progress,
-                            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                             valueColor: AlwaysStoppedAnimation<Color>(
                               Theme.of(context).colorScheme.primary,
                             ),

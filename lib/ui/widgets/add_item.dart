@@ -18,6 +18,8 @@ class AddItem extends StatefulWidget {
     this.selectedCategory,
     this.scrollController,
     this.initiallySelectedItems = const [],
+    this.onAddCategory,
+    this.onDeleteCategory,
     super.key,
   });
   final List<PackingCategory> categories;
@@ -41,6 +43,10 @@ class AddItem extends StatefulWidget {
   final PackingCategory? selectedCategory;
 
   final ScrollController? scrollController;
+
+  final void Function()? onAddCategory;
+
+  final Future<void> Function(PackingCategory)? onDeleteCategory;
 
   @override
   State<AddItem> createState() => _AddItemState();
@@ -66,6 +72,51 @@ class _AddItemState extends State<AddItem> {
     _itemNameFocusNode.dispose();
     _textFieldController.dispose();
     super.dispose();
+  }
+
+  void _showDeleteCategoryDialog(BuildContext context, PackingCategory category) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(LocaleKeys.categories_delete_category_title.tr()),
+          content: Text(
+            LocaleKeys.categories_delete_category_desc.tr(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(LocaleKeys.general_cancel.tr()),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (widget.onDeleteCategory != null) {
+                  try {
+                    await widget.onDeleteCategory!(category);
+                    Navigator.pop(context);
+                  } catch (e) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(LocaleKeys.categories_delete_category_error.tr()),
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                        duration: const Duration(seconds: 2),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    );
+                  }
+                }
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.error,
+              ),
+              child: Text(LocaleKeys.general_delete.tr()),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -125,17 +176,72 @@ class _AddItemState extends State<AddItem> {
                             curve: Curves.easeInOut,
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: selectedCategory.id == category.id
+                              color: widget.selectedCategory == category
                                   ? Theme.of(context).colorScheme.primaryContainer
                                   : Theme.of(context).colorScheme.surface,
                               borderRadius: BorderRadius.circular(32),
                               border: Border.all(
-                                color: selectedCategory.id == category.id
+                                color: widget.selectedCategory == category
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context).colorScheme.outline,
                               ),
                             ),
-                            child: Text(category.name.tr()),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(category.name.tr()),
+                                if (widget.onDeleteCategory != null && widget.selectedCategory == category) ...[
+                                  const SizedBox(width: 4),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _showDeleteCategoryDialog(context, category);
+                                    },
+                                    child: Icon(
+                                      Icons.delete_forever_rounded,
+                                      size: 16,
+                                      color: selectedCategory.id == category.id
+                                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                                          : Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    // Add Category button
+                    if (widget.onAddCategory != null)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: GestureDetector(
+                          onTap: widget.onAddCategory,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.secondaryContainer,
+                              borderRadius: BorderRadius.circular(32),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  LocaleKeys.categories_add_new.tr(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

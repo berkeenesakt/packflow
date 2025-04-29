@@ -8,7 +8,6 @@ import 'package:packflow/core/repositories/hive_packing_list_repository.dart';
 import 'package:packflow/core/router/app_router.dart';
 import 'package:packflow/generated/locale_keys.g.dart';
 import 'package:packflow/ui/widgets/empty_state_widget.dart';
-import 'package:packflow/ui/widgets/home/info_card.dart';
 import 'package:packflow/ui/widgets/home/packing_list_card.dart';
 import 'package:packflow/ui/widgets/home/section_header.dart';
 import 'package:provider/provider.dart';
@@ -139,26 +138,6 @@ class _HomeViewState extends State<HomeView> {
                     const SizedBox(height: 8),
                   ],
 
-                  // Travel Tip section
-                  Visibility(
-                    visible: false,
-                    child: Column(
-                      children: [
-                        const SectionHeader(
-                          title: LocaleKeys.home_travel_tip,
-                          icon: Icons.lightbulb_outline,
-                          iconColor: Colors.amber,
-                        ),
-                        InfoCard(
-                          title: LocaleKeys.home_travel_tip,
-                          content: provider.travelTip,
-                          icon: Icons.lightbulb_outline,
-                          cardColor: const Color(0xFFFFF8E1),
-                          iconColor: Colors.amber,
-                        ),
-                      ],
-                    ),
-                  ),
                   SizedBox(height: 56 + MediaQuery.of(context).padding.bottom),
                 ],
               );

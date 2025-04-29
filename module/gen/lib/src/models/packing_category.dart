@@ -11,10 +11,13 @@ class PackingCategory extends Equatable {
   final String id;
   @HiveField(1)
   final String name;
+  @HiveField(2)
+  final DateTime? createdAt;
 
   const PackingCategory({
     required this.id,
     required this.name,
+    this.createdAt,
   });
 
   factory PackingCategory.fromJson(Map<String, dynamic> json) => _$PackingCategoryFromJson(json);

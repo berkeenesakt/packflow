@@ -81,7 +81,10 @@
         "toiletries": "Banyo Malzemeleri",
         "essentials": "Temel Malzemeler",
         "documents": "Belgeler",
-        "add_new": "Yeni Kategori Ekle"
+        "add_new": "Yeni Kategori Ekle",
+        "delete_category_title": "Kategoriyi Sil",
+        "delete_category_desc": "Bu kategoriyi silmek istediğinizden emin misiniz? Bu kategorideki tüm öğeler silinecektir.",
+        "delete_category_error": "En az bir kategoriye sahip olmalısınız"
     },
     "items": {
         "title": "Eşyalarım",

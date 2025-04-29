@@ -117,9 +117,11 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
     } on ItemExistsException {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(LocaleKeys.packing_list_item_exists.tr()),
-          duration: const Duration(seconds: 2),
-        ),
+            content: Text(LocaleKeys.packing_list_item_exists.tr()),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
       );
       return;
     }

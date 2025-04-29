@@ -62,4 +62,30 @@ class ItemsProvider extends ChangeNotifier {
     _items.remove(item);
     notifyListeners();
   }
+
+  Future<void> addCategory(PackingCategory category) async {
+    await categoriesRepository.addCategory(category);
+    await loadCategories();
+    await setSelectedCategory(category);
+  }
+
+  Future<void> deleteCategory(PackingCategory category) async {
+    if (_categories.length == 1) {
+      throw Exception('Cannot delete the last category');
+    }
+    await categoriesRepository.deleteCategory(category.id);
+    // If the deleted category is the selected one, select another one if available
+    if (_selectedCategory?.id == category.id) {
+      await loadCategories();
+      if (_categories.isNotEmpty) {
+        await setSelectedCategory(_categories.first);
+      } else {
+        _selectedCategory = null;
+        _items = [];
+        notifyListeners();
+      }
+    } else {
+      await loadCategories();
+    }
+  }
 }

@@ -79,6 +79,9 @@ abstract class  LocaleKeys {
   static const categories_essentials = 'categories.essentials';
   static const categories_documents = 'categories.documents';
   static const categories_add_new = 'categories.add_new';
+  static const categories_delete_category_title = 'categories.delete_category_title';
+  static const categories_delete_category_desc = 'categories.delete_category_desc';
+  static const categories_delete_category_error = 'categories.delete_category_error';
   static const categories = 'categories';
   static const items_title = 'items.title';
   static const items_manage_items = 'items.manage_items';

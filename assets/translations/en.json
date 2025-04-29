@@ -81,7 +81,11 @@
         "toiletries": "Toiletries",
         "essentials": "Essentials",
         "documents": "Documents",
-        "add_new": "Add New Category"
+        "add_new": "Add New Category",
+        "edit_category": "Edit Category",
+        "delete_category_title": "Delete Category",
+        "delete_category_desc": "Are you sure you want to delete this category? This will remove all items in this category.",
+        "delete_category_error": "You need to have at least one category"
     },
     "items": {
         "title": "My Items",

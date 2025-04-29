@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:packflow/core/providers/items_provider.dart';
 import 'package:packflow/core/repositories/categories_repository.dart';
 import 'package:packflow/core/repositories/hive_categories_repository.dart';
 import 'package:packflow/core/repositories/hive_items_repository.dart';
@@ -14,6 +15,7 @@ import 'package:packflow/ui/widgets/add_item.dart';
 import 'package:packflow/ui/widgets/app_filled_button.dart';
 import 'package:packflow/ui/widgets/app_text_form_field.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 @RoutePage()
 class CreatePackingListView extends StatefulWidget {
@@ -35,6 +37,9 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
   late CreatePackingListProvider _provider;
   final ItemsRepository _itemsRepository = HiveItemsRepository();
   final CategoriesRepository _categoriesRepository = HiveCategoriesRepository();
+
+  final _categoryFormKey = GlobalKey<FormState>();
+  final _categoryNameController = TextEditingController();
 
   @override
   void initState() {
@@ -83,9 +88,68 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
             ),
           ),
           backgroundColor: Theme.of(context).colorScheme.error,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }
+  }
+
+  void _showAddCategoryDialog(BuildContext context, CreatePackingListProvider provider) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(LocaleKeys.add_sheet_add_category.tr()),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Form(
+                key: _categoryFormKey,
+                child: AppTextFormField(
+                  controller: _categoryNameController,
+                  labelText: LocaleKeys.categories_add_new.tr(),
+                  hintText: LocaleKeys.packing_list_name.tr(),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return LocaleKeys.error_field_required.tr();
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(LocaleKeys.general_cancel.tr()),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (_categoryFormKey.currentState!.validate()) {
+                  // Create new category
+                  final category = PackingCategory(
+                    id: const Uuid().v4(),
+                    name: _categoryNameController.text.trim(),
+                  );
+
+                  // Add category and close dialog
+                  await provider.addCategory(category);
+                  await provider.setSelectedCategory(category);
+                  // Clear text and close dialog
+                  _categoryNameController.clear();
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              child: Text(LocaleKeys.general_save.tr()),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -172,6 +236,7 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
                     items: provider.items,
                     onAddItem: (String itemName) => provider.addItem(itemName, context),
                     onSelectCategory: provider.setSelectedCategory,
+                    onAddCategory: () => _showAddCategoryDialog(context, provider),
                     onToggleItem: provider.toggleItem,
                     onDeleteItem: provider.deleteItem,
                     selectedItems: provider.selectedItems,

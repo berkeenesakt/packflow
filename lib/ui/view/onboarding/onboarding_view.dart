@@ -74,9 +74,11 @@ class _OnboardingViewState extends State<OnboardingView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(LocaleKeys.onboarding_notification_permission_failed.tr()),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
+              content: Text(LocaleKeys.onboarding_notification_permission_failed.tr()),
+              backgroundColor: Theme.of(context).colorScheme.error,
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
         );
       }
     } finally {

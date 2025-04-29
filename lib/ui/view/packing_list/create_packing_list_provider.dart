@@ -79,9 +79,11 @@ class CreatePackingListProvider extends ChangeNotifier {
     } on ItemExistsException catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(LocaleKeys.packing_list_item_exists.tr()),
-          duration: const Duration(seconds: 2),
-        ),
+            content: Text(LocaleKeys.packing_list_item_exists.tr()),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
       );
       return;
     }
@@ -104,6 +106,12 @@ class CreatePackingListProvider extends ChangeNotifier {
     _selectedItems.remove(item);
     _items.remove(item);
     notifyListeners();
+  }
+
+  Future<void> addCategory(PackingCategory category) async {
+    await categoriesRepository.addCategory(category);
+    await loadCategories();
+    await setSelectedCategory(category);
   }
 
   bool isItemSelected(String itemId) {
