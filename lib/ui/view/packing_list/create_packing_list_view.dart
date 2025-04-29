@@ -104,6 +104,10 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
                 provider.isEditing
                     ? LocaleKeys.packing_list_edit_title.tr()
                     : LocaleKeys.packing_list_create_title.tr(),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
             ),
             body: Form(

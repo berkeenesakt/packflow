@@ -72,7 +72,7 @@ class _PackingListsViewState extends State<PackingListsView> {
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.only(top: 16, bottom: 56 + MediaQuery.of(context).padding.bottom, left: 16, right: 16),
             itemCount: packingLists.length,
             itemBuilder: (context, index) {
               final packingList = packingLists[index];

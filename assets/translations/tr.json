@@ -29,12 +29,15 @@
         "create_title": "Paketleme Listesi Oluştur",
         "add_item_title": "Eşya Ekle",
         "edit_title": "Paketleme Listesini Düzenle",
+        "edit": "Paketleme Listesini Düzenle",
         "item_exists": "Bu eşya zaten mevcut",
         "name_label": "İsim",
         "name_hint": "Paketleme listeniz için bir isim girin",
         "name_validation": "Lütfen bir isim girin",
+        "name": "İsim",
         "description_label": "Açıklama (isteğe bağlı)",
         "description_hint": "Paketleme listenize bir açıklama ekleyin",
+        "description": "Açıklama",
         "travel_dates": "Seyahat Tarihleri (isteğe bağlı)",
         "dates_not_set": "Ayarlanmadı",
         "create_button": "Liste Oluştur",
@@ -44,7 +47,8 @@
         "delete_item_title": "Öğeyi Sil",
         "delete_item_confirmation": "Bu öğeyi silmek istediğinizden emin misiniz?",
         "cancel": "İptal",
-        "delete": "Sil",
+        "delete": "Paketleme Listesini Sil",
+        "delete_desc": "Bu paketleme listesini silmek istediğinizden emin misiniz?",
         "item_name": "Öğe Adı",
         "item_name_required": "Öğe Adı gereklidir",
         "no_items": "Henüz öğe eklenmedi. Aşağıdan yeni bir öğe oluşturun.",
@@ -53,7 +57,10 @@
         "no_lists_yet": "Henüz paketleme listesi yok",
         "create_first_list": "İlk paketleme listenizi oluşturun",
         "items_packed": "öğe paketlendi",
-        "created_on": "Oluşturulma tarihi"
+        "created_on": "Oluşturulma tarihi",
+        "created_at": "Oluşturulma tarihi",
+        "items_summary": "Öğe Özeti",
+        "return_date": "Dönüş Tarihi"
     },
     "common": {
         "updating": "güncelleme",
@@ -122,12 +129,16 @@
     "general": {
         "cancel": "İptal",
         "save": "Kaydet",
-        "delete": "Sil"
+        "delete": "Sil",
+        "not_set": "Ayarlanmadı"
     },
     "notifications": {
         "packing_reminder_title": "Paketleme Hatırlatıcısı",
         "packing_reminder_body": "Seyahatiniz için paketlemeyi unutmayın: {{trip_name}}",
         "channel_packing_reminders": "Paketleme Hatırlatıcıları",
         "channel_description": "Seyahatinizden önce paketleme hatırlatmaları"
+    },
+    "error": {
+        "field_required": "Bu alan gereklidir"
     }
 }

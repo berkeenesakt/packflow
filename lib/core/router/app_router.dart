@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:packflow/core/repositories/packing_list_repository.dart';
+import 'package:packflow/ui/view/edit_packing_list/edit_packing_list_view.dart';
 import 'package:packflow/ui/view/home_view.dart';
 import 'package:packflow/ui/view/navigation/navigation_view.dart';
 import 'package:packflow/ui/view/onboarding/onboarding_view.dart';
@@ -24,5 +25,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: CreatePackingListRoute.page, path: '/create-packing-list'),
         AutoRoute(page: PackRoute.page, path: '/pack'),
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
+        AutoRoute(page: EditPackingListRoute.page, path: '/edit-packing-list'),
       ];
 }

@@ -159,7 +159,7 @@ class _HomeViewState extends State<HomeView> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 56 + MediaQuery.of(context).padding.bottom),
                 ],
               );
             },

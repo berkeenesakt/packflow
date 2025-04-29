@@ -62,6 +62,52 @@ class CreatePackingListRouteArgs {
 }
 
 /// generated route for
+/// [EditPackingListView]
+class EditPackingListRoute extends PageRouteInfo<EditPackingListRouteArgs> {
+  EditPackingListRoute({
+    Key? key,
+    required PackingList packingList,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EditPackingListRoute.name,
+          args: EditPackingListRouteArgs(
+            key: key,
+            packingList: packingList,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'EditPackingListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<EditPackingListRouteArgs>();
+      return EditPackingListView(
+        key: args.key,
+        packingList: args.packingList,
+      );
+    },
+  );
+}
+
+class EditPackingListRouteArgs {
+  const EditPackingListRouteArgs({
+    this.key,
+    required this.packingList,
+  });
+
+  final Key? key;
+
+  final PackingList packingList;
+
+  @override
+  String toString() {
+    return 'EditPackingListRouteArgs{key: $key, packingList: $packingList}';
+  }
+}
+
+/// generated route for
 /// [HomeView]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})

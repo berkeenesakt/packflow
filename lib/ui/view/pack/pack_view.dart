@@ -9,18 +9,19 @@ import 'package:packflow/core/exceptions/item_exceptions.dart';
 import 'package:packflow/core/repositories/hive_categories_repository.dart';
 import 'package:packflow/core/repositories/hive_items_repository.dart';
 import 'package:packflow/core/repositories/hive_packing_list_repository.dart';
+import 'package:packflow/core/router/app_router.dart';
 import 'package:packflow/generated/locale_keys.g.dart';
 import 'package:packflow/ui/widgets/add_item.dart';
 import 'package:packflow/ui/widgets/items/item_card.dart';
 
 @RoutePage()
 class PackView extends StatefulWidget {
-  const PackView({
+  PackView({
     required this.packingList,
     super.key,
   });
 
-  final PackingList packingList;
+  PackingList packingList;
 
   @override
   State<PackView> createState() => _PackViewState();
@@ -162,11 +163,69 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
       ..forward();
   }
 
+  Future<void> _deletePackingList() async {
+    await packRepository.deletePackingList(widget.packingList.id);
+    if (mounted) {
+      context.router.popForced();
+      context.router.popForced();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.packing_list_items.tr()),
+        title: Text(
+          LocaleKeys.packing_list_items.tr(),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              context.router
+                  .push(
+                EditPackingListRoute(
+                  packingList: widget.packingList,
+                ),
+              )
+                  .then((value) {
+                if (value != null && value is PackingList) {
+                  setState(() {
+                    widget.packingList = value;
+                  });
+                }
+              });
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () async {
+              await showDialog<void>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(LocaleKeys.packing_list_delete.tr()),
+                    content: Text(LocaleKeys.packing_list_delete_desc.tr()),
+                    actions: [
+                      TextButton(
+                        onPressed: () => context.router.popForced(),
+                        child: Text(LocaleKeys.general_cancel.tr()),
+                      ),
+                      TextButton(
+                        onPressed: _deletePackingList,
+                        child: Text(LocaleKeys.general_delete.tr()),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -246,7 +305,7 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
                 .then((value) => value?.items.where((item) => item.categoryId == selectedCategory?.id).toList() ?? []),
         builder: (context, snapshot) {
           if (snapshot.data == null) {
-            return const Center(child: CircularProgressIndicator());
+            return const SizedBox();
           }
           return Column(
             children: [

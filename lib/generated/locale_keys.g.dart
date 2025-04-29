@@ -29,12 +29,15 @@ abstract class  LocaleKeys {
   static const packing_list_create_title = 'packing_list.create_title';
   static const packing_list_add_item_title = 'packing_list.add_item_title';
   static const packing_list_edit_title = 'packing_list.edit_title';
+  static const packing_list_edit = 'packing_list.edit';
   static const packing_list_item_exists = 'packing_list.item_exists';
   static const packing_list_name_label = 'packing_list.name_label';
   static const packing_list_name_hint = 'packing_list.name_hint';
   static const packing_list_name_validation = 'packing_list.name_validation';
+  static const packing_list_name = 'packing_list.name';
   static const packing_list_description_label = 'packing_list.description_label';
   static const packing_list_description_hint = 'packing_list.description_hint';
+  static const packing_list_description = 'packing_list.description';
   static const packing_list_travel_dates = 'packing_list.travel_dates';
   static const packing_list_dates_not_set = 'packing_list.dates_not_set';
   static const packing_list_create_button = 'packing_list.create_button';
@@ -45,6 +48,7 @@ abstract class  LocaleKeys {
   static const packing_list_delete_item_confirmation = 'packing_list.delete_item_confirmation';
   static const packing_list_cancel = 'packing_list.cancel';
   static const packing_list_delete = 'packing_list.delete';
+  static const packing_list_delete_desc = 'packing_list.delete_desc';
   static const packing_list_item_name = 'packing_list.item_name';
   static const packing_list_item_name_required = 'packing_list.item_name_required';
   static const packing_list_no_items = 'packing_list.no_items';
@@ -54,6 +58,9 @@ abstract class  LocaleKeys {
   static const packing_list_create_first_list = 'packing_list.create_first_list';
   static const packing_list_items_packed = 'packing_list.items_packed';
   static const packing_list_created_on = 'packing_list.created_on';
+  static const packing_list_created_at = 'packing_list.created_at';
+  static const packing_list_items_summary = 'packing_list.items_summary';
+  static const packing_list_return_date = 'packing_list.return_date';
   static const packing_list = 'packing_list';
   static const common_updating = 'common.updating';
   static const common_creating = 'common.creating';
@@ -116,11 +123,14 @@ abstract class  LocaleKeys {
   static const general_cancel = 'general.cancel';
   static const general_save = 'general.save';
   static const general_delete = 'general.delete';
+  static const general_not_set = 'general.not_set';
   static const general = 'general';
   static const notifications_packing_reminder_title = 'notifications.packing_reminder_title';
   static const notifications_packing_reminder_body = 'notifications.packing_reminder_body';
   static const notifications_channel_packing_reminders = 'notifications.channel_packing_reminders';
   static const notifications_channel_description = 'notifications.channel_description';
   static const notifications = 'notifications';
+  static const error_field_required = 'error.field_required';
+  static const error = 'error';
 
 }
