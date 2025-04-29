@@ -15,6 +15,7 @@ import 'package:packflow/ui/widgets/add_item.dart';
 import 'package:packflow/ui/widgets/items/item_card.dart';
 
 @RoutePage()
+// ignore: must_be_immutable
 class PackView extends StatefulWidget {
   PackView({
     required this.packingList,
