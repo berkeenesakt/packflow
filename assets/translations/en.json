@@ -29,12 +29,15 @@
         "create_title": "Create Packing List",
         "add_item_title": "Add Item",
         "edit_title": "Edit Packing List",
+        "edit": "Edit Packing List",
         "item_exists": "This item already exists",
         "name_label": "Name",
         "name_hint": "Enter a name for your packing list",
         "name_validation": "Please enter a name",
+        "name": "Name",
         "description_label": "Description (optional)",
         "description_hint": "Add a description for your packing list",
+        "description": "Description",
         "travel_dates": "Travel Dates (optional)",
         "dates_not_set": "Not set",
         "create_button": "Create List",
@@ -44,7 +47,8 @@
         "delete_item_title": "Delete Item",
         "delete_item_confirmation": "Are you sure you want to delete this item?",
         "cancel": "Cancel",
-        "delete": "Delete",
+        "delete": "Delete Packing List",
+        "delete_desc": "Are you sure you want to delete this packing list?",
         "item_name": "Item Name",
         "item_name_required": "Item Name is required",
         "no_items": "No items added yet. Create a new item below.",
@@ -53,7 +57,10 @@
         "no_lists_yet": "No packing lists yet",
         "create_first_list": "Create your first packing list",
         "items_packed": "items packed",
-        "created_on": "Created on"
+        "created_on": "Created on",
+        "created_at": "Created on",
+        "items_summary": "Items Summary",
+        "return_date": "Return Date"
     },
     "common": {
         "updating": "updating",
@@ -122,13 +129,16 @@
     "general": {
         "cancel": "Cancel",
         "save": "Save",
-        "delete": "Delete"
+        "delete": "Delete",
+        "not_set": "Not set"
     },
     "notifications": {
         "packing_reminder_title": "Packing Reminder",
         "packing_reminder_body": "Don't forget to pack for your trip: {{trip_name}}",
         "channel_packing_reminders": "Packing Reminders",
         "channel_description": "Reminders to pack before your trip"
+    },
+    "error": {
+        "field_required": "This field is required"
     }
 }
-    

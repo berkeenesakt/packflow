@@ -25,7 +25,13 @@ class _SettingsViewState extends State<SettingsView> {
     final appSettings = Provider.of<AppSettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.navigation_titles_settings.tr()),
+        title: Text(
+          LocaleKeys.navigation_titles_settings.tr(),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+        ),
       ),
       body: ListView(
         children: [
