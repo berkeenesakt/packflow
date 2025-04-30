@@ -195,18 +195,30 @@ class _SettingsViewState extends State<SettingsView> {
               title: const Text('English'),
               value: 'en',
               groupValue: context.locale.languageCode,
-              onChanged: (value) {
-                appSettings.setLocale(context, Locales.en.locale);
+              onChanged: (value) async {
+                // Close dialog first
                 Navigator.pop(context);
+                // Then change locale with await to ensure it completes
+                await appSettings.setLocale(context, Locales.en.locale);
+                // Force a rebuild after locale change
+                if (mounted) {
+                  setState(() {});
+                }
               },
             ),
             RadioListTile<String>(
               title: const Text('Türkçe'),
               value: 'tr',
               groupValue: context.locale.languageCode,
-              onChanged: (value) {
-                appSettings.setLocale(context, Locales.tr.locale);
+              onChanged: (value) async {
+                // Close dialog first
                 Navigator.pop(context);
+                // Then change locale with await to ensure it completes
+                await appSettings.setLocale(context, Locales.tr.locale);
+                // Force a rebuild after locale change
+                if (mounted) {
+                  setState(() {});
+                }
               },
             ),
           ],

@@ -110,15 +110,18 @@ class AppSettingsProvider extends ChangeNotifier {
   Locale get locale => _locale;
 
   // Set locale
-  void setLocale(BuildContext context, Locale locale) {
+  Future<void> setLocale(BuildContext context, Locale locale) async {
     _locale = locale;
 
     // Save to Hive
     final localeString =
         locale.countryCode != null ? '${locale.languageCode}_${locale.countryCode}' : locale.languageCode;
-    _box.put(_localeKey, localeString);
+    await _box.put(_localeKey, localeString);
 
-    context.setLocale(locale);
+    // Make sure to await the locale change
+    await context.setLocale(locale);
+
+    // Notify listeners after the locale has been fully set
     notifyListeners();
   }
 
