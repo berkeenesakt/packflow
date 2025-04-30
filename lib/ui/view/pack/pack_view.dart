@@ -6,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:packflow/core/exceptions/item_exceptions.dart';
+import 'package:packflow/core/providers/items_provider.dart';
 import 'package:packflow/core/repositories/hive_categories_repository.dart';
 import 'package:packflow/core/repositories/hive_items_repository.dart';
 import 'package:packflow/core/repositories/hive_packing_list_repository.dart';
 import 'package:packflow/core/router/app_router.dart';
 import 'package:packflow/generated/locale_keys.g.dart';
 import 'package:packflow/ui/widgets/add_item.dart';
+import 'package:packflow/ui/widgets/app_text_form_field.dart';
 import 'package:packflow/ui/widgets/items/item_card.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 @RoutePage()
 // ignore: must_be_immutable
@@ -118,7 +122,10 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(LocaleKeys.packing_list_item_exists.tr()),
+          backgroundColor: Theme.of(context).colorScheme.error,
           duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
       return;
@@ -186,11 +193,12 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {
-              context.router
+            onPressed: () async {
+              final list = await packRepository.getPackingList(widget.packingList.id);
+              await context.router
                   .push(
                 EditPackingListRoute(
-                  packingList: widget.packingList,
+                  packingList: list!,
                 ),
               )
                   .then((value) {
@@ -239,6 +247,73 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
               final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
               final isKeyboardVisible = keyboardHeight > 0;
               final initiallySelectedItems = List<PackingItem>.from(items);
+              // ignore: no_leading_underscores_for_local_identifiers
+              final _categoryNameController = TextEditingController();
+              // ignore: no_leading_underscores_for_local_identifiers
+              final _categoryFormKey = GlobalKey<FormState>();
+              // ignore: no_leading_underscores_for_local_identifiers, unused_element
+              void _showAddCategoryDialog(
+                BuildContext context,
+                ItemsProvider provider,
+                void Function(void Function()) setState,
+              ) {
+                showDialog<void>(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(LocaleKeys.add_sheet_add_category.tr()),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Form(
+                            key: _categoryFormKey,
+                            child: AppTextFormField(
+                              controller: _categoryNameController,
+                              labelText: LocaleKeys.categories_add_new.tr(),
+                              hintText: LocaleKeys.packing_list_name.tr(),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return LocaleKeys.error_field_required.tr();
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(LocaleKeys.general_cancel.tr()),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            if (_categoryFormKey.currentState!.validate()) {
+                              // Create new category
+                              final category = PackingCategory(
+                                id: const Uuid().v4(),
+                                name: _categoryNameController.text.trim(),
+                              );
+
+                              // Add category and close dialog
+                              await provider.addCategory(category);
+                              await provider.setSelectedCategory(category);
+                              setState(() {});
+                              // Clear text and close dialog
+                              _categoryNameController.clear();
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
+                            }
+                          },
+                          child: Text(LocaleKeys.general_save.tr()),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+
               return Padding(
                 padding: EdgeInsets.only(bottom: isKeyboardVisible ? keyboardHeight : 0),
                 child: Container(
@@ -255,39 +330,55 @@ class _PackViewState extends State<PackView> with SingleTickerProviderStateMixin
                     minChildSize: 0.5,
                     maxChildSize: 0.95,
                     builder: (context, scrollController) {
-                      return StatefulBuilder(
-                        builder: (context, setState) {
-                          return AddItem(
-                            categories: dialogCategories,
-                            items: itemsOnCategory,
-                            scrollController: scrollController,
-                            onAddItem: (item) {
-                              _addItem(item, selectedDialogCategory!.id);
-                            },
-                            onSelectCategory: (category) {
-                              setState(() => selectedDialogCategory = category);
+                      return ChangeNotifierProvider(
+                        create: (context) => ItemsProvider(
+                          itemsRepository: HiveItemsRepository(),
+                          categoriesRepository: HiveCategoriesRepository(),
+                        ),
+                        child: StatefulBuilder(
+                          builder: (context, setState) {
+                            return Consumer<ItemsProvider>(
+                              builder: (context, itemsProvider, child) {
+                                return AddItem(
+                                  categories: dialogCategories,
+                                  items: itemsOnCategory,
+                                  scrollController: scrollController,
+                                  onAddItem: (item) {
+                                    _addItem(item, selectedDialogCategory!.id);
+                                  },
+                                  //onAddCategory: () => _showAddCategoryDialog(context, itemsProvider, setState),
+                                  //onDeleteCategory: itemsProvider.deleteCategory,
+                                  showIndicator: true,
+                                  onSelectCategory: (category) {
+                                    setState(() => selectedDialogCategory = category);
 
-                              itemsRepository.getItems().then((value) {
-                                return value.where((item) => item.categoryId == selectedDialogCategory!.id).toList();
-                              }).then((value) {
-                                final newItems = value..removeWhere(initiallySelectedItems.contains);
-                                setState(() => itemsOnCategory = newItems);
-                              });
-                            },
-                            selectedCategory: selectedDialogCategory,
-                            onToggleItem: _toggleDialogItem,
-                            onDeleteItem: (item) {
-                              packRepository.deleteItem(widget.packingList.id, item.id);
-                              setState(() {
-                                itemsOnCategory.remove(item);
-                                checkedItems.remove(item);
-                              });
-                            },
-                            selectedItems: items,
-                            hideInitiallySelectedItems: true,
-                            initiallySelectedItems: initiallySelectedItems,
-                          );
-                        },
+                                    itemsRepository.getItems().then((value) {
+                                      return value
+                                          .where((item) => item.categoryId == selectedDialogCategory!.id)
+                                          .toList();
+                                    }).then((value) {
+                                      final newItems = value..removeWhere(initiallySelectedItems.contains);
+                                      setState(() => itemsOnCategory = newItems);
+                                    });
+                                  },
+                                  selectedCategory: selectedDialogCategory,
+                                  onToggleItem: (p0) async {
+                                    await _toggleDialogItem(p0);
+                                    setState(() {});
+                                  },
+                                  onDeleteItem: (item) {
+                                    packRepository.deleteItem(widget.packingList.id, item.id);
+                                    setState(() {
+                                      itemsOnCategory.remove(item);
+                                      checkedItems.remove(item);
+                                    });
+                                  },
+                                  selectedItems: items,
+                                );
+                              },
+                            );
+                          },
+                        ),
                       );
                     },
                   ),

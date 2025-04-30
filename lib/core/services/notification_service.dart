@@ -98,7 +98,6 @@ class NotificationService {
       );
     } catch (e) {
       // Handle timezone initialization errors
-      print('Error scheduling notification: $e');
     }
   }
 

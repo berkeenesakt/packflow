@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:packflow/core/repositories/packing_list_repository.dart';
-import 'package:packflow/generated/locale_keys.g.dart';
 
 class HomeProvider extends ChangeNotifier {
   HomeProvider({
@@ -20,12 +17,10 @@ class HomeProvider extends ChangeNotifier {
   List<PackingList> _recentLists = [];
   List<PackingList> _inProgressLists = [];
   List<PackingList> _fullyPackedLists = [];
-  String _travelTip = '';
 
   List<PackingList> get recentLists => _recentLists;
   List<PackingList> get inProgressLists => _inProgressLists;
   List<PackingList> get fullyPackedLists => _fullyPackedLists;
-  String get travelTip => _travelTip;
 
   Future<void> loadRecentLists() async {
     final allLists = await packingListRepository.getAllPackingLists();
@@ -64,17 +59,6 @@ class HomeProvider extends ChangeNotifier {
     _fullyPackedLists = _fullyPackedLists.take(3).toList();
 
     notifyListeners();
-  }
-
-  void _generateRandomTravelTip() {
-    final tips = [
-      LocaleKeys.home_passport_reminder,
-      LocaleKeys.home_charger_reminder,
-      LocaleKeys.home_medicine_reminder,
-    ];
-
-    final random = Random();
-    _travelTip = tips[random.nextInt(tips.length)];
   }
 
   void refresh() {

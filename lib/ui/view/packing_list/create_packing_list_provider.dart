@@ -79,14 +79,36 @@ class CreatePackingListProvider extends ChangeNotifier {
     } on ItemExistsException catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(LocaleKeys.packing_list_item_exists.tr()),
-          duration: const Duration(seconds: 2),
-        ),
+            content: Text(LocaleKeys.packing_list_item_exists.tr()),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
       );
       return;
     }
     _selectedItems.add(newItem);
     notifyListeners();
+  }
+
+  Future<void> deleteCategory(PackingCategory category) async {
+    if (_categories.length == 1) {
+      throw Exception('Cannot delete the last category');
+    }
+    await categoriesRepository.deleteCategory(category.id);
+    // If the deleted category is the selected one, select another one if available
+    if (_selectedCategory?.id == category.id) {
+      await loadCategories();
+      if (_categories.isNotEmpty) {
+        await setSelectedCategory(_categories.first);
+      } else {
+        _selectedCategory = null;
+        _items = [];
+        notifyListeners();
+      }
+    } else {
+      await loadCategories();
+    }
   }
 
   void toggleItem(PackingItem item) {
@@ -104,6 +126,12 @@ class CreatePackingListProvider extends ChangeNotifier {
     _selectedItems.remove(item);
     _items.remove(item);
     notifyListeners();
+  }
+
+  Future<void> addCategory(PackingCategory category) async {
+    await categoriesRepository.addCategory(category);
+    await loadCategories();
+    await setSelectedCategory(category);
   }
 
   bool isItemSelected(String itemId) {
