@@ -78,12 +78,12 @@ class _SettingsViewState extends State<SettingsView> {
             context,
             icon: Icons.info_outline,
             title: LocaleKeys.settings_version.tr(),
-            subtitle: '1.0.0',
+            subtitle: '1.0.2',
             onTap: () {
               showAboutDialog(
                 context: context,
                 applicationName: 'PackFlow',
-                applicationVersion: '1.0.0',
+                applicationVersion: '1.0.2',
                 applicationIcon: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
