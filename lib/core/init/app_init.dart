@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
@@ -33,6 +34,11 @@ class AppInit {
 
     // Initialize Firebase
     await Firebase.initializeApp();
+
+    // Initialize Analytics
+    final analytics = FirebaseAnalytics.instance;
+
+    await analytics.setAnalyticsCollectionEnabled(true);
 
     // Initialize notification service
     await NotificationService().initialize();
