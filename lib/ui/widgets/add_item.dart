@@ -15,6 +15,7 @@ class AddItem extends StatefulWidget {
     required this.onDeleteItem,
     required this.selectedItems,
     this.showIndicator = false,
+    this.fullScreenView = false,
     this.selectedCategory,
     this.scrollController,
     this.onAddCategory,
@@ -44,6 +45,8 @@ class AddItem extends StatefulWidget {
   final Future<void> Function(PackingCategory)? onDeleteCategory;
 
   final bool showIndicator;
+
+  final bool fullScreenView;
 
   @override
   State<AddItem> createState() => _AddItemState();
@@ -278,7 +281,7 @@ class _AddItemState extends State<AddItem> {
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16),
                       itemCount: widget.items.length,
                       separatorBuilder: (context, index) => const SizedBox(height: 12),
                       itemBuilder: (context, index) {

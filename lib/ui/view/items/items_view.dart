@@ -116,6 +116,7 @@ class _ItemsViewState extends State<ItemsView> {
                         selectedCategory: provider.selectedCategory,
                         onAddCategory: () => _showAddCategoryDialog(context, provider),
                         onDeleteCategory: (category) => provider.deleteCategory(category),
+                        fullScreenView: true,
                       );
                     },
                   ),
