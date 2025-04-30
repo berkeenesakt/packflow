@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:packflow/core/providers/items_provider.dart';
 import 'package:packflow/core/repositories/categories_repository.dart';
 import 'package:packflow/core/repositories/hive_categories_repository.dart';
 import 'package:packflow/core/repositories/hive_items_repository.dart';
@@ -56,12 +55,6 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
     Hive.box<PackingCategory>('categories').listenable().addListener(() {
       _provider.loadCategories();
     });
-  }
-
-  @override
-  void dispose() {
-    _provider.dispose();
-    super.dispose();
   }
 
   Future<void> _selectDateRange() async {
@@ -156,9 +149,8 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CreatePackingListProvider>.value(
       value: _provider,
-      child: Builder(
-        builder: (context) {
-          final provider = Provider.of<CreatePackingListProvider>(context);
+      child: Consumer<CreatePackingListProvider>(
+        builder: (context, provider, child) {
           if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -235,8 +227,10 @@ class _CreatePackingListViewState extends State<CreatePackingListView> {
                     categories: provider.categories,
                     items: provider.items,
                     onAddItem: (String itemName) => provider.addItem(itemName, context),
+                    selectedCategory: provider.selectedCategory,
                     onSelectCategory: provider.setSelectedCategory,
                     onAddCategory: () => _showAddCategoryDialog(context, provider),
+                    onDeleteCategory: provider.deleteCategory,
                     onToggleItem: provider.toggleItem,
                     onDeleteItem: provider.deleteItem,
                     selectedItems: provider.selectedItems,

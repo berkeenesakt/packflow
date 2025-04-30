@@ -91,6 +91,26 @@ class CreatePackingListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteCategory(PackingCategory category) async {
+    if (_categories.length == 1) {
+      throw Exception('Cannot delete the last category');
+    }
+    await categoriesRepository.deleteCategory(category.id);
+    // If the deleted category is the selected one, select another one if available
+    if (_selectedCategory?.id == category.id) {
+      await loadCategories();
+      if (_categories.isNotEmpty) {
+        await setSelectedCategory(_categories.first);
+      } else {
+        _selectedCategory = null;
+        _items = [];
+        notifyListeners();
+      }
+    } else {
+      await loadCategories();
+    }
+  }
+
   void toggleItem(PackingItem item) {
     final index = _selectedItems.indexWhere((i) => i.id == item.id);
     if (index != -1) {

@@ -14,10 +14,9 @@ class AddItem extends StatefulWidget {
     required this.onToggleItem,
     required this.onDeleteItem,
     required this.selectedItems,
-    this.hideInitiallySelectedItems = false,
+    this.showIndicator = false,
     this.selectedCategory,
     this.scrollController,
-    this.initiallySelectedItems = const [],
     this.onAddCategory,
     this.onDeleteCategory,
     super.key,
@@ -36,10 +35,6 @@ class AddItem extends StatefulWidget {
 
   final List<PackingItem> selectedItems;
 
-  final bool hideInitiallySelectedItems;
-
-  final List<PackingItem> initiallySelectedItems;
-
   final PackingCategory? selectedCategory;
 
   final ScrollController? scrollController;
@@ -48,24 +43,16 @@ class AddItem extends StatefulWidget {
 
   final Future<void> Function(PackingCategory)? onDeleteCategory;
 
+  final bool showIndicator;
+
   @override
   State<AddItem> createState() => _AddItemState();
 }
 
 class _AddItemState extends State<AddItem> {
   final _itemFormKey = GlobalKey<FormState>();
-  late PackingCategory selectedCategory;
   final _itemNameFocusNode = FocusNode();
   final _textFieldController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    selectedCategory = widget.selectedCategory ?? widget.categories.first;
-    if (widget.hideInitiallySelectedItems) {
-      widget.items.removeWhere((item) => widget.initiallySelectedItems.contains(item));
-    }
-  }
 
   @override
   void dispose() {
@@ -130,9 +117,9 @@ class _AddItemState extends State<AddItem> {
           bottom: MediaQuery.of(context).viewInsets.bottom + 16,
         ),
         child: Column(
-          crossAxisAlignment: widget.hideInitiallySelectedItems ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+          crossAxisAlignment: widget.showIndicator ? CrossAxisAlignment.center : CrossAxisAlignment.start,
           children: [
-            if (widget.hideInitiallySelectedItems == true) ...[
+            if (widget.showIndicator == true) ...[
               Container(
                 width: 40,
                 height: 4,
@@ -167,9 +154,6 @@ class _AddItemState extends State<AddItem> {
                         child: GestureDetector(
                           onTap: () {
                             widget.onSelectCategory(category);
-                            setState(() {
-                              selectedCategory = category;
-                            });
                           },
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
@@ -199,7 +183,7 @@ class _AddItemState extends State<AddItem> {
                                     child: Icon(
                                       Icons.delete_forever_rounded,
                                       size: 16,
-                                      color: selectedCategory.id == category.id
+                                      color: widget.selectedCategory?.id == category.id
                                           ? Theme.of(context).colorScheme.onPrimaryContainer
                                           : Theme.of(context).colorScheme.onSurface,
                                     ),
