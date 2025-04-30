@@ -3,28 +3,28 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDSi02SNAQiiYzMW8rH2qAgwPVjZm9jsaw</string>
+	<string>AIzaSyAFxmnqlpP8yUC48yFPYbtWCcnyQVn2H1c</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1030158446836</string>
+	<string>16742215021</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.aktumen.PackFlow</string>
+	<string>com.aktumen.packflow</string>
 	<key>PROJECT_ID</key>
-	<string>PackFlow-1</string>
+	<string>packflow-896d4</string>
 	<key>STORAGE_BUCKET</key>
-	<string>PackFlow-1.firebasestorage.app</string>
+	<string>packflow-896d4.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1030158446836:ios:d65c95ca9a0be10f2c6ea1</string>
+	<string>1:16742215021:ios:1786b017fac1c986dd7e64</string>
 </dict>
 </plist>
