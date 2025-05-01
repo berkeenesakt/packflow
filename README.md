@@ -57,7 +57,6 @@ lib/
 - Flutter SDK (3.29.3)
 - Dart SDK (3.7.2)
 - Firebase project setup
-- IDE (VSCode recommended)
 - Android SDK (35.0.1)
 - XCode 16.3
 
